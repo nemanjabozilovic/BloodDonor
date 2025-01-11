@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.BloodDonor" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowSplashScreenBackground">@color/primary_color</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_screen</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.BloodDonor</item>
+        <item name="android:fontFamily">@font/exo_regular</item>
+    </style>
+</resources>

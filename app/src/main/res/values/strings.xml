@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">BloodDonor</string>
+    <string name="app_title">Blood Donation</string>
+    <string name="login">Login</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="new_user">New user?</string>
+    <string name="create_account">Create Account</string>
+    <string name="register">Register</string>
+    <string name="full_name_hint">Full Name</string>
+    <string name="blood_type_hint">Blood Type</string>
+    <string name="please_fill_all_fields">Please fill all fields</string>
+    <string name="registered_message">Registered: %1$s, %2$s</string>
+</resources>
