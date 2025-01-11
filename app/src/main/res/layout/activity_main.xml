@@ -64,8 +64,7 @@
                     android:inputType="textEmailAddress"
                     android:drawableStart="@drawable/ic_email"
                     android:drawablePadding="12dp"
-                    android:padding="12dp"
-                    android:fontFamily="@font/exo_light" />
+                    android:padding="12dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -91,8 +90,7 @@
                     android:inputType="textPassword"
                     android:drawableStart="@drawable/ic_lock"
                     android:drawablePadding="12dp"
-                    android:padding="12dp"
-                    android:fontFamily="@font/exo_light" />
+                    android:padding="12dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView

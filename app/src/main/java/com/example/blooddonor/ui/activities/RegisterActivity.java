@@ -88,6 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void setupDropdown(AutoCompleteTextView dropdown, String[] items) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
         dropdown.setAdapter(adapter);
+        dropdown.setOnClickListener(v -> dropdown.showDropDown());
         dropdown.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 dropdown.showDropDown();
@@ -101,6 +102,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         ArrayAdapter<String> roleAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, roleNames);
         roleDropdown.setAdapter(roleAdapter);
+        roleDropdown.setOnClickListener(v -> roleDropdown.showDropDown());
         roleDropdown.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 roleDropdown.showDropDown();
@@ -187,7 +189,7 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
-        if(!EmailValidator.isValidEmail(email)) {
+        if (!EmailValidator.isValidEmail(email)) {
             emailInputLayout.setError(getString(R.string.error_invalid_email));
             return false;
         }
