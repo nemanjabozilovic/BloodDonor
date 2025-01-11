@@ -5,15 +5,17 @@ public class User {
     private String fullName;
     private String email;
     private String password;
+    private String salt;
     private String bloodType;
     private String profilePicture;
     private int roleId;
 
-    public User(int id, String fullName, String email, String password, String bloodType, String profilePicture, int roleId) {
+    public User(int id, String fullName, String email, String password, String salt, String bloodType, String profilePicture, int roleId) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
         this.password = password;
+        this.salt = salt;
         this.bloodType = bloodType;
         this.profilePicture = profilePicture;
         this.roleId = roleId;
@@ -73,5 +75,13 @@ public class User {
 
     public void setRoleId(int roleId) {
         this.roleId = roleId;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }

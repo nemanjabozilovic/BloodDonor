@@ -41,6 +41,7 @@
                 android:fontFamily="@font/exo_medium" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/full_name_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
@@ -61,6 +62,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/email_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
@@ -81,6 +83,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/password_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
@@ -116,11 +119,46 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:drawableStart="@drawable/ic_blood_bag"
                     android:drawablePadding="12dp"
                     android:padding="12dp"
                     android:fontFamily="@font/exo_light" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/user_role_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                app:hintEnabled="true"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="@color/red"
+                android:hint="@string/user_role_hint">
+
+                <AutoCompleteTextView
+                    android:id="@+id/user_role_dropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:drawableStart="@drawable/ic_role"
+                    android:drawablePadding="12dp"
+                    android:padding="12dp"
+                    android:fontFamily="@font/exo_light" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/register_error_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:visibility="gone"
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                android:gravity="center" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/register_button"

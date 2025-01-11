@@ -4,9 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.blooddonor.utils.PasswordUtils;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "blood_donor.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Table Names
     private static final String TABLE_USERS = "users";
@@ -28,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_FULL_NAME = "full_name";
     private static final String COLUMN_EMAIL = "email";
     private static final String COLUMN_PASSWORD = "password";
+    private static final String COLUMN_SALT = "salt";
     private static final String COLUMN_PROFILE_PICTURE = "profile_picture";
     private static final String COLUMN_ROLE_ID = "role_id";
 
@@ -66,6 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_FULL_NAME + " TEXT NOT NULL, " +
             COLUMN_EMAIL + " TEXT NOT NULL UNIQUE, " +
             COLUMN_PASSWORD + " TEXT NOT NULL, " +
+            COLUMN_SALT + " TEXT NOT NULL, " +
             COLUMN_BLOOD_TYPE + " TEXT, " +
             COLUMN_PROFILE_PICTURE + " TEXT, " +
             COLUMN_ROLE_ID + " INTEGER NOT NULL, " +
@@ -123,7 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_FAQ);
 
         // Insert default roles
-        db.execSQL("INSERT INTO " + TABLE_ROLES + " (" + COLUMN_ROLE_NAME + ") VALUES ('Admin'), ('NaturalPerson'), ('LegalEntity');");
+        db.execSQL("INSERT INTO " + TABLE_ROLES + " (" + COLUMN_ROLE_NAME + ") VALUES ('Admin'), ('Natural Person'), ('Legal Entity');");
 
         // Insert default location types
         db.execSQL("INSERT INTO " + TABLE_LOCATION_TYPES + " (" + COLUMN_NAME + ") VALUES ('Hospital'), ('Health Center'), ('Medical Faculty');");
@@ -131,16 +135,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Insert default admin user
         String adminFullName = "Admin User";
         String adminEmail = "admin@example.com";
-        String adminPasswordHash = "adminpassword"; // Use a hashed value for real implementation
+        String adminSalt = PasswordUtils.generateSalt();
+        String adminPasswordHash = PasswordUtils.hashPassword("adminpassword", adminSalt);
 
         db.execSQL("INSERT INTO " + TABLE_USERS + " (" +
                 COLUMN_FULL_NAME + ", " +
                 COLUMN_EMAIL + ", " +
                 COLUMN_PASSWORD + ", " +
+                COLUMN_SALT + ", " +
                 COLUMN_ROLE_ID + ") " +
                 "VALUES ('" + adminFullName + "', '" +
                 adminEmail + "', '" +
-                adminPasswordHash + "', " +
+                adminPasswordHash + "', '" +
+                adminSalt + "', " +
                 "(SELECT " + COLUMN_ID + " FROM " + TABLE_ROLES + " WHERE " + COLUMN_ROLE_NAME + " = 'Admin'));");
     }
 

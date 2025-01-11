@@ -30,6 +30,10 @@
             android:name=".ui.activities.RegisterActivity"
             android:theme="@style/Theme.BloodDonor">
         </activity>
+        <activity
+            android:name=".ui.activities.HomeActivity"
+            android:theme="@style/Theme.BloodDonor">
+        </activity>
     </application>
 
 </manifest>

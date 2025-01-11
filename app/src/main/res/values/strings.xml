@@ -9,7 +9,26 @@
     <string name="create_account">Create Account</string>
     <string name="register">Register</string>
     <string name="full_name_hint">Full Name</string>
-    <string name="blood_type_hint">Blood Type</string>
-    <string name="please_fill_all_fields">Please fill all fields</string>
-    <string name="registered_message">Registered: %1$s, %2$s</string>
+    <string name="blood_type_hint">Select blood type</string>
+    <string-array name="blood_types">
+        <item>O+</item>
+        <item>O-</item>
+        <item>A+</item>
+        <item>A-</item>
+        <item>B+</item>
+        <item>B-</item>
+        <item>AB+</item>
+        <item>AB-</item>
+    </string-array>
+    <string name="invalid_credentials">Invalid email or password</string>
+    <string name="login_error">An error occurred during login</string>
+    <string name="error_empty_email">Please enter your email</string>
+    <string name="error_empty_password">Please enter your password</string>
+    <string name="error_empty_blood_type">Please select your blood type</string>
+    <string name="error_empty_name">Please enter your full name</string>
+    <string name="user_role_hint">Select user type</string>
+    <string name="error_empty_role">Please select a role</string>
+    <string name="register_success">Registration successful!</string>
+    <string name="register_error">An error occurred during registration</string>
+    <string name="error_invalid_email">Invalid email address</string>
 </resources>

@@ -6,9 +6,12 @@ import java.util.List;
 
 public interface UserRepository {
     User getUserById(int userId);
+
+    boolean userExists(String email);
+
     List<User> getAllUsers();
-    boolean insertUser(User user);
-    boolean updateUser(User user);
+    User insertUser(User user);
+    User updateUser(User user);
     boolean deleteUser(int userId);
-    boolean assignRoleToUser(int userId, int roleId);
+    User login(String email, String password);
 }
