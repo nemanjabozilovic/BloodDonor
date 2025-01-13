@@ -13,10 +13,11 @@ public class UserDTO implements Parcelable {
     private String profilePicture;
     private int roleId;
     private String roleName;
+    private int verificationCode;
 
     public UserDTO() {}
 
-    public UserDTO(int id, String fullName, String email, String password, String salt, String bloodType, String profilePicture, int roleId) {
+    public UserDTO(int id, String fullName, String email, String password, String salt, String bloodType, String profilePicture, int roleId, int verificationCode) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
@@ -25,6 +26,7 @@ public class UserDTO implements Parcelable {
         this.bloodType = bloodType;
         this.profilePicture = profilePicture;
         this.roleId = roleId;
+        this.verificationCode = verificationCode;
     }
 
     protected UserDTO(Parcel in) {
@@ -35,6 +37,7 @@ public class UserDTO implements Parcelable {
         bloodType = in.readString();
         profilePicture = in.readString();
         roleId = in.readInt();
+        verificationCode = in.readInt();
     }
 
     public static final Creator<UserDTO> CREATOR = new Creator<UserDTO>() {
@@ -135,5 +138,13 @@ public class UserDTO implements Parcelable {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public int getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(int verificationCode) {
+        this.verificationCode = verificationCode;
     }
 }

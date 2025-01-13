@@ -10,6 +10,5 @@ public interface RoleUseCase {
     boolean insertRole(RoleDTO roleDTO);
     boolean updateRole(RoleDTO roleDTO);
     boolean deleteRole(int roleId);
-
     int getRoleIdByName(String roleName);
 }

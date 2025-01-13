@@ -1,5 +1,8 @@
 package com.example.blooddonor.ui.activities;
 
+import static com.example.blooddonor.utils.TextInputHelper.addTextWatcher;
+import static com.example.blooddonor.utils.TextInputHelper.clearError;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -63,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
         UserRepository userRepository = new UserRepositoryImpl(dbHelper);
 
         roleUseCase = new RoleUseCaseImpl(roleRepository);
-        userUseCase = new UserUseCaseImpl(userRepository, roleUseCase);
+        userUseCase = new UserUseCaseImpl(userRepository, roleRepository);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -240,27 +243,5 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    private void addTextWatcher(TextInputEditText editText, TextInputLayout inputLayout) {
-        editText.addTextChangedListener(new android.text.TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(s)) {
-                    clearError(inputLayout);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(android.text.Editable s) {}
-        });
-    }
-
-    private void clearError(TextInputLayout inputLayout) {
-        inputLayout.setError(null);
-        inputLayout.setErrorEnabled(false);
     }
 }

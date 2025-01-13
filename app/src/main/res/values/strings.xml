@@ -4,6 +4,7 @@
     <string name="login">Login</string>
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
+    <string name="forgot_your_password">Forgot your password?</string>
     <string name="reset_password">Reset Password</string>
     <string name="new_user">New user?</string>
     <string name="create_account">Create Account</string>
@@ -31,4 +32,26 @@
     <string name="register_success">Registration successful!</string>
     <string name="register_error">An error occurred during registration</string>
     <string name="error_invalid_email">Invalid email address</string>
+    <string name="reset_email_hint">Enter your email</string>
+    <string name="send_email">Send Email</string>
+    <string name="error_email_not_found">Email not found</string>
+    <string name="email_sent">Verification email sent successfully</string>
+    <string name="error_sending_email">Error sending email</string>
+    <string name="verify">Verify</string>
+    <string name="verification_code_hint">Verification Code</string>
+    <string name="enter_verification_code">Enter Verification Code</string>
+    <string name="error_empty_verification_code">Please enter the verification code</string>
+    <string name="error_invalid_verification_code">Invalid verification code</string>
+    <string name="verification_successful">Verification successful</string>
+    <string name="reset_password_email_subject">Reset Your Password</string>
+    <string name="reset_password_email_body">Your verification code is: %1$d</string>
+    <string name="error_updating_verification_code">Failed to update verification code</string>
+    <string name="error_verification_failed">Verification failed. Please try again later.</string>
+    <string name="error_user_not_found">User not found. Please try again.</string>
+    <string name="change_password">Change Password</string>
+    <string name="new_password_hint">New Password</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="error_passwords_not_matching">Passwords do not match</string>
+    <string name="password_changed_successfully">Password changed successfully</string>
+    <string name="error_updating_password">Error updating password</string>
 </resources>

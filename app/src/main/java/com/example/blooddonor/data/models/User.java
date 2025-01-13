@@ -9,8 +9,9 @@ public class User {
     private String bloodType;
     private String profilePicture;
     private int roleId;
+    private int verificationCode;
 
-    public User(int id, String fullName, String email, String password, String salt, String bloodType, String profilePicture, int roleId) {
+    public User(int id, String fullName, String email, String password, String salt, String bloodType, String profilePicture, int roleId, int verificationCode) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
@@ -19,6 +20,7 @@ public class User {
         this.bloodType = bloodType;
         this.profilePicture = profilePicture;
         this.roleId = roleId;
+        this.verificationCode = verificationCode;
     }
 
     public int getId() {
@@ -83,5 +85,13 @@ public class User {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public int getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(int verificationCode) {
+        this.verificationCode = verificationCode;
     }
 }

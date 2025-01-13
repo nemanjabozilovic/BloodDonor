@@ -8,7 +8,7 @@ import com.example.blooddonor.utils.PasswordUtils;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "blood_donor.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
 
     // Table Names
     private static final String TABLE_USERS = "users";
@@ -33,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_SALT = "salt";
     private static final String COLUMN_PROFILE_PICTURE = "profile_picture";
     private static final String COLUMN_ROLE_ID = "role_id";
+    private static final String COLUMN_VERIFICATION_CODE = "verification_code";
 
     // Locations Table
     private static final String COLUMN_NAME = "name";
@@ -73,6 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_BLOOD_TYPE + " TEXT, " +
             COLUMN_PROFILE_PICTURE + " TEXT, " +
             COLUMN_ROLE_ID + " INTEGER NOT NULL, " +
+            COLUMN_VERIFICATION_CODE + " INTEGER, " +
             "FOREIGN KEY (" + COLUMN_ROLE_ID + ") REFERENCES " + TABLE_ROLES + "(" + COLUMN_ID + "));";
 
     private static final String CREATE_TABLE_LOCATION_TYPES = "CREATE TABLE " + TABLE_LOCATION_TYPES + " (" +

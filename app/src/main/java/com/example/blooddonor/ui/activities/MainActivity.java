@@ -1,11 +1,13 @@
 package com.example.blooddonor.ui.activities;
 
+import static com.example.blooddonor.utils.TextInputHelper.addTextWatcher;
+import static com.example.blooddonor.utils.TextInputHelper.clearError;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,16 +25,17 @@ import com.example.blooddonor.domain.usecases.implementation.UserUseCaseImpl;
 import com.example.blooddonor.domain.usecases.interfaces.RoleUseCase;
 import com.example.blooddonor.domain.usecases.interfaces.UserUseCase;
 import com.example.blooddonor.utils.EmailValidator;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText emailField, passwordField;
-    private Button loginButton;
-    private TextView createAccountText, errorText;
+    private TextInputEditText emailField, passwordField;
     private TextInputLayout emailInputLayout, passwordInputLayout;
+    private Button loginButton;
+    private TextView createAccountText, errorText, resetPasswordText;
 
     private UserUseCase userUseCase;
 
@@ -51,22 +54,24 @@ public class MainActivity extends AppCompatActivity {
         UserRepository userRepository = new UserRepositoryImpl(dbHelper);
         RoleRepository roleRepository = new RoleRepositoryImpl(dbHelper);
         RoleUseCase roleUseCase = new RoleUseCaseImpl(roleRepository);
-        userUseCase = new UserUseCaseImpl(userRepository, roleUseCase);
+        userUseCase = new UserUseCaseImpl(userRepository, roleRepository);
     }
 
     private void initializeUIElements() {
         emailField = findViewById(R.id.email_field);
         passwordField = findViewById(R.id.password_field);
-        loginButton = findViewById(R.id.login_button);
-        createAccountText = findViewById(R.id.create_account);
         emailInputLayout = findViewById(R.id.email_input_layout);
         passwordInputLayout = findViewById(R.id.password_input_layout);
+        loginButton = findViewById(R.id.login_button);
+        createAccountText = findViewById(R.id.create_account);
         errorText = findViewById(R.id.invalid_credentials_message);
+        resetPasswordText = findViewById(R.id.reset_password);
     }
 
     private void setupListeners() {
         loginButton.setOnClickListener(v -> handleLogin());
         createAccountText.setOnClickListener(v -> openRegisterActivity());
+        resetPasswordText.setOnClickListener(v -> openResetPasswordActivity());
 
         addTextWatcher(emailField, emailInputLayout);
         addTextWatcher(passwordField, passwordInputLayout);
@@ -100,7 +105,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private String getFieldValue(EditText field) {
+    private void openResetPasswordActivity() {
+        Intent intent = new Intent(this, ResetPasswordActivity.class);
+        startActivity(intent);
+    }
+
+    private String getFieldValue(TextInputEditText field) {
         return Objects.requireNonNull(field.getText()).toString().trim();
     }
 
@@ -116,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
 
-        if(!EmailValidator.isValidEmail(email)) {
+        if (!EmailValidator.isValidEmail(email)) {
             emailInputLayout.setError(getString(R.string.error_invalid_email));
             return false;
         }
@@ -139,27 +149,5 @@ public class MainActivity extends AppCompatActivity {
     private void showError(String message) {
         errorText.setText(message);
         errorText.setVisibility(View.VISIBLE);
-    }
-
-    private void addTextWatcher(EditText editText, TextInputLayout inputLayout) {
-        editText.addTextChangedListener(new android.text.TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!TextUtils.isEmpty(s)) {
-                    clearError(inputLayout);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(android.text.Editable s) {}
-        });
-    }
-
-    private void clearError(TextInputLayout inputLayout) {
-        inputLayout.setError(null);
-        inputLayout.setErrorEnabled(false);
     }
 }

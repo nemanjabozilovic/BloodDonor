@@ -37,13 +37,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/login"
+                android:text="@string/enter_verification_code"
                 android:textSize="26sp"
                 android:textColor="@android:color/darker_gray"
                 android:fontFamily="@font/exo_medium" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/email_input_layout"
+                android:id="@+id/verification_code_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
@@ -57,55 +57,28 @@
                 app:hintTextColor="@color/red">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/email_field"
+                    android:id="@+id/verification_code_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/email_hint"
-                    android:inputType="textEmailAddress"
-                    android:drawableStart="@drawable/ic_email"
-                    android:drawablePadding="12dp"
-                    android:padding="12dp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/password_input_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                app:hintEnabled="true"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusTopStart="4dp"
-                app:boxCornerRadiusTopEnd="4dp"
-                app:boxCornerRadiusBottomStart="4dp"
-                app:boxCornerRadiusBottomEnd="4dp"
-                app:boxStrokeColor="@color/red"
-                app:hintTextColor="@color/red"
-                app:endIconMode="password_toggle">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/password_field"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/password_hint"
-                    android:inputType="textPassword"
-                    android:drawableStart="@drawable/ic_lock"
+                    android:hint="@string/verification_code_hint"
+                    android:inputType="number"
+                    android:drawableStart="@drawable/ic_key"
                     android:drawablePadding="12dp"
                     android:padding="12dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/invalid_credentials_message"
+                android:id="@+id/error_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:visibility="gone"
-                android:text="@string/invalid_credentials"
                 android:textColor="@color/red"
                 android:textSize="14sp"
                 android:gravity="center" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/login_button"
+                android:id="@+id/verify_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -113,45 +86,8 @@
                 android:backgroundTint="@color/red"
                 app:cornerRadius="4dp"
                 app:rippleColor="@color/lighter_red"
-                android:text="@string/login"
+                android:text="@string/verify"
                 android:textColor="@android:color/white" />
-
-            <TextView
-                android:id="@+id/reset_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textSize="13sp"
-                android:text="@string/forgot_your_password"
-                android:textColor="@color/red"
-                android:fontFamily="@font/exo_light"
-                android:onClick="openResetPasswordActivity" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="38dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/new_user"
-                android:textColor="@android:color/white"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/create_account"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/create_account"
-                android:textColor="@color/white"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:padding="5dp"
-                android:onClick="openRegisterActivity" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

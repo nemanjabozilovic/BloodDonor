@@ -6,9 +6,9 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 public class PasswordUtils {
-    private static final int SALT_LENGTH = 16; // bytes
+    private static final int SALT_LENGTH = 16; // Bytes
     private static final int HASH_ITERATIONS = 10000;
-    private static final int KEY_LENGTH = 256; // bits
+    private static final int KEY_LENGTH = 256; // Bits
 
     public static String generateSalt() {
         SecureRandom secureRandom = new SecureRandom();

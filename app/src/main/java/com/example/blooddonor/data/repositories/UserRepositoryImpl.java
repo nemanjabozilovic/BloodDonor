@@ -22,6 +22,7 @@ public class UserRepositoryImpl implements UserRepository {
     private static final String COLUMN_BLOOD_TYPE = "blood_type";
     private static final String COLUMN_PROFILE_PICTURE = "profile_picture";
     private static final String COLUMN_ROLE_ID = "role_id";
+    private static final String COLUMN_VERIFICATION_CODE = "verification_code";
 
     private final DatabaseHelper dbHelper;
 
@@ -105,9 +106,7 @@ public class UserRepositoryImpl implements UserRepository {
             String storedHashedPassword = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PASSWORD));
             String salt = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SALT));
 
-            String hashedPassword = PasswordUtils.hashPassword(password, salt);
-
-            if (storedHashedPassword.equals(hashedPassword)) {
+            if (PasswordUtils.verifyPassword(password, salt, storedHashedPassword)) {
                 User user = mapCursorToUser(cursor);
                 cursor.close();
                 return user;
@@ -116,6 +115,47 @@ public class UserRepositoryImpl implements UserRepository {
 
         cursor.close();
         return null;
+    }
+
+    @Override
+    public boolean updateVerificationCode(String email, int verificationCode) {
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_VERIFICATION_CODE, verificationCode);
+
+        int rowsAffected = database.update(TABLE_USERS, values, COLUMN_EMAIL + " = ?", new String[]{email});
+
+        return rowsAffected > 0;
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        SQLiteDatabase database = dbHelper.getReadableDatabase();
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + TABLE_USERS + " WHERE " + COLUMN_EMAIL + " = ?",
+                new String[]{email}
+        );
+
+        if (cursor.moveToFirst()) {
+            User user = mapCursorToUser(cursor);
+            cursor.close();
+            return user;
+        }
+
+        cursor.close();
+        return null;
+    }
+
+    @Override
+    public boolean updatePassword(String email, String hashedPassword, String salt) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("password", hashedPassword);
+        values.put("salt", salt);
+
+        int rowsAffected = db.update("users", values, "email = ?", new String[]{email});
+        return rowsAffected > 0;
     }
 
     private User mapCursorToUser(Cursor cursor) {
@@ -127,7 +167,8 @@ public class UserRepositoryImpl implements UserRepository {
                 cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SALT)),
                 cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BLOOD_TYPE)),
                 cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PROFILE_PICTURE)),
-                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ROLE_ID))
+                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ROLE_ID)),
+                cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_VERIFICATION_CODE))
         );
     }
 
@@ -140,6 +181,7 @@ public class UserRepositoryImpl implements UserRepository {
         values.put(COLUMN_BLOOD_TYPE, user.getBloodType());
         values.put(COLUMN_PROFILE_PICTURE, user.getProfilePicture());
         values.put(COLUMN_ROLE_ID, user.getRoleId());
+        values.put(COLUMN_VERIFICATION_CODE, user.getVerificationCode());
         return values;
     }
 }
