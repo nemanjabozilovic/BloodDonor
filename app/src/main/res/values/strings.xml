@@ -54,4 +54,18 @@
     <string name="error_passwords_not_matching">Passwords do not match</string>
     <string name="password_changed_successfully">Password changed successfully</string>
     <string name="error_updating_password">Error updating password</string>
+    <string name="profile">Profile</string>
+    <string name="request_blood">Request Blood</string>
+    <string name="notifications">Notifications</string>
+    <string name="faq">Frequently Asked Questions</string>
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    <string name="locations">Locations</string>
+    <string name="users">Users</string>
+    <string name="admin_options">Admin Options</string>
+    <string name="home">Home</string>
+    <string name="logout">Logout</string>
+    <string name="donate_blood">Donate Blood</string>
+    <string name="save_lives">Save Lives</string>
+    <string name="active_blood_requests">Active Blood Requests</string>
 </resources>

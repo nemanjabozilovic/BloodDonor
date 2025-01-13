@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         UserRepository userRepository = new UserRepositoryImpl(dbHelper);
         RoleRepository roleRepository = new RoleRepositoryImpl(dbHelper);
-        RoleUseCase roleUseCase = new RoleUseCaseImpl(roleRepository);
         userUseCase = new UserUseCaseImpl(userRepository, roleRepository);
     }
 
