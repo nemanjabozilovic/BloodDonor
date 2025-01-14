@@ -235,17 +235,21 @@ public class AddLocationActivity extends BaseActivity {
 
             if (locationUseCase.insertLocation(location) != null) {
                 Toast.makeText(this, getString(R.string.location_saved), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, LocationListActivity.class);
-                intent.putExtra("userDTO", currentUser);
-                intent.putExtra("location", location);
-                startActivity(intent);
-                finish();
+                openLocationListActivity(location);
             }else{
                 Toast.makeText(this, getString(R.string.location_save_error), Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void openLocationListActivity(LocationDTO location) {
+        Intent intent = new Intent(this, LocationListActivity.class);
+        intent.putExtra("userDTO", currentUser);
+        intent.putExtra("location", location);
+        startActivity(intent);
+        finish();
     }
 
     private String getFieldValue(TextInputEditText field) {

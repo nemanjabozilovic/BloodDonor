@@ -66,6 +66,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             navigationView.getMenu().findItem(R.id.nav_location_list).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_add_location).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_users).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_add_user).setVisible(true);
         }
 
         navigationView.setNavigationItemSelectedListener(item -> {
@@ -93,7 +94,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                 navigateToActivity(AddLocationActivity.class);
                 break;
             case R.id.nav_users:
-                navigateToActivity(UsersActivity.class);
+                navigateToActivity(UserListActivity.class);
+                break;
+            case R.id.nav_add_user:
+                navigateToActivity(AddUserActivity.class);
                 break;
             case R.id.nav_request_blood:
                 navigateToActivity(RequestBloodActivity.class);

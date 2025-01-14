@@ -57,7 +57,15 @@
             android:theme="@style/Theme.BloodDonor">
         </activity>
         <activity
-            android:name=".ui.activities.UsersActivity"
+            android:name=".ui.activities.UserListActivity"
+            android:theme="@style/Theme.BloodDonor">
+        </activity>
+        <activity
+            android:name=".ui.activities.AddUserActivity"
+            android:theme="@style/Theme.BloodDonor">
+        </activity>
+        <activity
+            android:name=".ui.activities.EditUserActivity"
             android:theme="@style/Theme.BloodDonor">
         </activity>
         <activity

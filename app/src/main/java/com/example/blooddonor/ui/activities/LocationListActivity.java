@@ -203,7 +203,7 @@ public class LocationListActivity extends BaseActivity {
     private void handleDeleteLocation(int locationId) {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.confirm_delete_title)
-                .setMessage(R.string.confirm_delete_message)
+                .setMessage(R.string.confirm_location_delete_message)
                 .setPositiveButton(R.string.yes, (dialog, which) -> {
                     if (locationUseCase.deleteLocation(locationId)) {
                         showToast(getString(R.string.location_deleted));

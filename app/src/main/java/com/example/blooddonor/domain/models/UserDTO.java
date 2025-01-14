@@ -34,9 +34,11 @@ public class UserDTO implements Parcelable {
         fullName = in.readString();
         email = in.readString();
         password = in.readString();
+        salt = in.readString();
         bloodType = in.readString();
         profilePicture = in.readString();
         roleId = in.readInt();
+        roleName = in.readString();
         verificationCode = in.readInt();
     }
 
@@ -58,9 +60,12 @@ public class UserDTO implements Parcelable {
         dest.writeString(fullName);
         dest.writeString(email);
         dest.writeString(password);
+        dest.writeString(salt);
         dest.writeString(bloodType);
         dest.writeString(profilePicture);
         dest.writeInt(roleId);
+        dest.writeString(roleName);
+        dest.writeInt(verificationCode);
     }
 
     @Override
@@ -100,6 +105,14 @@ public class UserDTO implements Parcelable {
         this.password = password;
     }
 
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
     public String getBloodType() {
         return bloodType;
     }
@@ -122,14 +135,6 @@ public class UserDTO implements Parcelable {
 
     public void setRoleId(int roleId) {
         this.roleId = roleId;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
     }
 
     public String getRoleName() {

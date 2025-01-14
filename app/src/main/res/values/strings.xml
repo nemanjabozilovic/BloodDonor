@@ -1,5 +1,5 @@
 <resources>
-    <string name="google_api_key">AIzaSyC0jgqs4KXewpKO1Md4Y59ui0SevrdIv_8</string>
+    <string name="google_api_key">GOOGLE_API_KEY</string>
     <string name="app_name">BloodDonor</string>
     <string name="app_title">Blood Donation</string>
     <string name="login">Login</string>
@@ -86,7 +86,7 @@
     <string name="error_empty_latitude">Latitude is required.</string>
     <string name="error_empty_longitude">Longitude is required.</string>
     <string name="error_empty_location_type">Please select a location type.</string>
-    <string name="view_locations">Location List</string>
+    <string name="view_locations">Locations</string>
     <string name="add_location">Add Location</string>
     <string name="edit_location">Edit Location</string>
     <string name="place_selected">Place selected: %1$s</string>
@@ -95,12 +95,12 @@
     <string name="location_updated">Location updated successfully.</string>
     <string name="location_update_error">Failed to update location.</string>
     <string name="no_changes_detected">No changes detected.</string>
-    <string name="search_by_name">Search By Name</string>
+    <string name="search_by_location_name">Search By Name</string>
     <string name="sort_by_location_type">Sort By Location Type</string>
     <string name="location_details">Name: %1$s\nLocation: %2$s\nPhone Numbers: %3$s\nLocation Type: %4$s</string>
     <string name="location_details_title">Location Details</string>
     <string name="confirm_delete_title">Confirm Delete</string>
-    <string name="confirm_delete_message">Are you sure you want to delete this location?</string>
+    <string name="confirm_location_delete_message">Are you sure you want to delete this location?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">OK</string>
@@ -108,4 +108,22 @@
     <string name="error_deleting_location">Error deleting location.</string>
     <string name="no_user_data_found">No user data found</string>
     <string name="all">All</string>
+    <string name="add_user">Add User</string>
+    <string name="save_user">Save User</string>
+    <string name="user_saved_successfully">User saved successfully!</string>
+    <string name="user_save_error">Failed to save user. Please try again.</string>
+    <string name="search_by_user_name">Search By Name</string>
+    <string name="sort_by_user_type">Sort By User Type</string>
+    <string name="user_details_title">User Details</string>
+    <string name="user_details">Full Name: %1$s\nEmail: %2$s\nBlood Type: %3$s\nUser Type: %4$s</string>
+    <string name="user_deleted">User deleted successfully.</string>
+    <string name="error_deleting_user">Error deleting user.</string>
+    <string name="confirm_user_delete_message">Are you sure you want to delete this user?</string>
+    <string name="user_deletion_restriction">You cannot delete your own account.</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="edit_user">Edit User</string>
+    <string name="user_updated_successfully">User updated successfully.</string>
+    <string name="error_updating_user">Failed to update user.</string>
+    <string name="new_password_saved">New password saved.</string>
 </resources>

@@ -9,10 +9,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.blooddonor.R;
 import com.example.blooddonor.data.datasources.databases.DatabaseHelper;
@@ -26,35 +23,43 @@ import com.example.blooddonor.domain.usecases.implementation.RoleUseCaseImpl;
 import com.example.blooddonor.domain.usecases.implementation.UserUseCaseImpl;
 import com.example.blooddonor.domain.usecases.interfaces.RoleUseCase;
 import com.example.blooddonor.domain.usecases.interfaces.UserUseCase;
+import com.example.blooddonor.utils.EmailSender;
+import com.example.blooddonor.utils.EmailTemplates;
 import com.example.blooddonor.utils.EmailValidator;
 import com.example.blooddonor.utils.PasswordUtils;
-import com.example.blooddonor.utils.UserAlreadyExistsException;
+import com.example.blooddonor.utils.TextInputHelper;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class RegisterActivity extends AppCompatActivity {
+public class AddUserActivity extends BaseActivity {
 
-    private AutoCompleteTextView bloodTypeDropdown, roleDropdown;
     private TextInputEditText fullNameField, emailField, passwordField;
-    private TextInputLayout fullNameInputLayout, emailInputLayout, passwordInputLayout, bloodTypeInputLayout, roleInputLayout;
-    private Button registerButton;
+    private AutoCompleteTextView roleDropdown, bloodTypeDropdown;
+    private TextInputLayout fullNameInputLayout, emailInputLayout, passwordInputLayout, roleInputLayout, bloodTypeInputLayout;
+    private MaterialButton saveUserButton;
 
-    private UserUseCase userUseCase;
     private RoleUseCase roleUseCase;
+    private UserUseCase userUseCase;
+    private EmailSender emailSender;
 
-    private String selectedBloodType;
-    private String selectedRole;
+    private String selectedRole, selectedBloodType;
+
+    private UserDTO currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        getLayoutInflater().inflate(R.layout.activity_add_user, findViewById(R.id.content_frame));
+        setActiveMenuItem(R.id.nav_add_user);
+        setTitle(R.string.add_user);
 
         initializeDependencies();
+        initializeCurrentUser();
         initializeUIElements();
         setupListeners();
     }
@@ -66,23 +71,33 @@ public class RegisterActivity extends AppCompatActivity {
 
         roleUseCase = new RoleUseCaseImpl(roleRepository);
         userUseCase = new UserUseCaseImpl(userRepository, roleRepository);
+
+        emailSender = new EmailSender("office@blooddonor.com");
+    }
+
+    private void initializeCurrentUser() {
+        currentUser = getIntent().getParcelableExtra("userDTO");
+        if (currentUser == null) {
+            Toast.makeText(this, "No user data found", Toast.LENGTH_SHORT).show();
+        }
+        currentUser.setRoleName(roleUseCase.getRoleById(currentUser.getRoleId()).getRoleName());
     }
 
     @SuppressLint("ClickableViewAccessibility")
     private void initializeUIElements() {
-        bloodTypeDropdown = findViewById(R.id.blood_type_dropdown);
-        roleDropdown = findViewById(R.id.user_role_dropdown);
         fullNameField = findViewById(R.id.full_name);
         emailField = findViewById(R.id.email);
         passwordField = findViewById(R.id.password);
+        roleDropdown = findViewById(R.id.user_role_dropdown);
+        bloodTypeDropdown = findViewById(R.id.blood_type_dropdown);
 
         fullNameInputLayout = findViewById(R.id.full_name_input_layout);
         emailInputLayout = findViewById(R.id.email_input_layout);
         passwordInputLayout = findViewById(R.id.password_input_layout);
-        bloodTypeInputLayout = findViewById(R.id.blood_type_input_layout);
         roleInputLayout = findViewById(R.id.user_role_input_layout);
+        bloodTypeInputLayout = findViewById(R.id.blood_type_input_layout);
 
-        registerButton = findViewById(R.id.register_button);
+        saveUserButton = findViewById(R.id.save_user_button);
 
         populateBloodTypeDropdown(bloodTypeDropdown, getResources().getStringArray(R.array.blood_types));
         populateRoleDropdown();
@@ -124,7 +139,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        registerButton.setOnClickListener(v -> handleRegistration());
+        saveUserButton.setOnClickListener(v -> handleSaveUser());
 
         bloodTypeDropdown.setOnItemClickListener((parent, view, position, id) -> {
             selectedBloodType = (String) parent.getItemAtPosition(position);
@@ -141,14 +156,14 @@ public class RegisterActivity extends AppCompatActivity {
         addTextWatcher(passwordField, passwordInputLayout);
     }
 
-    private void handleRegistration() {
+    private void handleSaveUser() {
         String fullName = getFieldValue(fullNameField);
         String email = getFieldValue(emailField);
         String password = getFieldValue(passwordField);
 
         resetErrors();
 
-        if (!validateInputs(fullName, email, password, selectedBloodType, selectedRole)) {
+        if (!validateInputs(fullName, email, password, selectedRole, selectedBloodType)) {
             return;
         }
 
@@ -157,31 +172,69 @@ public class RegisterActivity extends AppCompatActivity {
             UserDTO createdUser = userUseCase.insertUser(newUser);
 
             if (createdUser != null) {
-                showToast(getString(R.string.register_success));
-                navigateToHome(createdUser);
+                Toast.makeText(this, getString(R.string.user_saved_successfully), Toast.LENGTH_SHORT).show();
+                sendWelcomeEmail(createdUser, email);
+                openUserListActivity(createdUser);
             } else {
-                showToast(getString(R.string.register_error));
+                Toast.makeText(this, getString(R.string.user_save_error), Toast.LENGTH_SHORT).show();
             }
-        } catch (UserAlreadyExistsException e) {
-            emailInputLayout.setError(e.getMessage());
         } catch (Exception e) {
-            showToast(getString(R.string.register_error));
+            Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
-    private String getFieldValue(TextInputEditText field) {
-        return Objects.requireNonNull(field.getText()).toString().trim();
+    private void sendWelcomeEmail(UserDTO user, String email) {
+        String subject = EmailTemplates.getWelcomeSubject();
+        String body = EmailTemplates.getNewUserWelcomeTemplate(user.getFullName());
+
+        emailSender.sendEmail(
+                email,
+                subject,
+                body,
+                new EmailSender.EmailSendCallback() {
+                    @Override
+                    public void onSuccess() {
+                    }
+
+                    @Override
+                    public void onFailure(String errorMessage) {
+                    }
+                }
+        );
+    }
+
+    private void openUserListActivity(UserDTO createdUser) {
+        Intent intent = new Intent(this, UserListActivity.class);
+        intent.putExtra("userDTO", currentUser);
+        intent.putExtra("createdUser", createdUser);
+        startActivity(intent);
+        finish();
+    }
+
+    private UserDTO createUserDTO(String fullName, String email, String password) {
+        String salt = PasswordUtils.generateSalt();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setFullName(fullName);
+        userDTO.setEmail(email);
+        userDTO.setSalt(salt);
+        userDTO.setPassword(PasswordUtils.hashPassword(password, salt));
+        userDTO.setBloodType(selectedBloodType);
+
+        int roleId = roleUseCase.getRoleIdByName(selectedRole);
+        userDTO.setRoleId(roleId);
+
+        return userDTO;
     }
 
     private void resetErrors() {
-        clearError(fullNameInputLayout);
-        clearError(emailInputLayout);
-        clearError(passwordInputLayout);
-        clearError(bloodTypeInputLayout);
-        clearError(roleInputLayout);
+        TextInputHelper.clearError(fullNameInputLayout);
+        TextInputHelper.clearError(emailInputLayout);
+        TextInputHelper.clearError(passwordInputLayout);
+        TextInputHelper.clearError(roleInputLayout);
+        TextInputHelper.clearError(bloodTypeInputLayout);
     }
 
-    private boolean validateInputs(String fullName, String email, String password, String bloodType, String role) {
+    private boolean validateInputs(String fullName, String email, String password, String role, String bloodType) {
         if (TextUtils.isEmpty(fullName)) {
             fullNameInputLayout.setError(getString(R.string.error_empty_name));
             return false;
@@ -202,46 +255,20 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
-        if (TextUtils.isEmpty(bloodType)) {
-            bloodTypeInputLayout.setError(getString(R.string.error_empty_blood_type));
+        if (TextUtils.isEmpty(role)) {
+            roleInputLayout.setError(getString(R.string.error_empty_role));
             return false;
         }
 
-        if (TextUtils.isEmpty(role)) {
-            roleInputLayout.setError(getString(R.string.error_empty_role));
+        if (TextUtils.isEmpty(bloodType)) {
+            bloodTypeInputLayout.setError(getString(R.string.error_empty_blood_type));
             return false;
         }
 
         return true;
     }
 
-    private UserDTO createUserDTO(String fullName, String email, String password) {
-        String salt = PasswordUtils.generateSalt();
-        UserDTO userDTO = new UserDTO();
-        userDTO.setFullName(fullName);
-        userDTO.setEmail(email);
-        userDTO.setSalt(salt);
-        userDTO.setPassword(PasswordUtils.hashPassword(password, salt));
-        userDTO.setBloodType(selectedBloodType);
-
-        int roleId = roleUseCase.getRoleIdByName(selectedRole);
-        if (roleId == -1) {
-            showToast(getString(R.string.register_error));
-            return null;
-        }
-        userDTO.setRoleId(roleId);
-
-        return userDTO;
-    }
-
-    private void navigateToHome(UserDTO createdUser) {
-        Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
-        intent.putExtra("userDTO", createdUser);
-        startActivity(intent);
-        finish();
-    }
-
-    private void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    private String getFieldValue(TextInputEditText field) {
+        return Objects.requireNonNull(field.getText()).toString().trim();
     }
 }

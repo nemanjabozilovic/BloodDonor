@@ -12,8 +12,13 @@
             android:title="@string/profile" />
         <item
             android:id="@+id/nav_users"
-            android:icon="@drawable/ic_user"
+            android:icon="@drawable/ic_users"
             android:title="@string/users"
+            android:visible="false" />
+        <item
+            android:id="@+id/nav_add_user"
+            android:icon="@drawable/ic_add_user"
+            android:title="@string/add_user"
             android:visible="false" />
         <item
             android:id="@+id/nav_location_list"

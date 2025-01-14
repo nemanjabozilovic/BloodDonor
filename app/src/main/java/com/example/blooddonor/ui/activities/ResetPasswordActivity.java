@@ -97,7 +97,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 return;
             }
 
-            String subject = EmailTemplates.getSubject();
+            String subject = EmailTemplates.getVerificationSubject();
             String body = EmailTemplates.getVerificationEmailTemplate(String.valueOf(verificationCode), user.getFullName());
 
             emailSender.sendEmail(

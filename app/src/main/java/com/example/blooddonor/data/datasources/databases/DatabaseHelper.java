@@ -135,12 +135,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Roles
         db.execSQL("INSERT INTO " + TABLE_ROLES + " (" + COLUMN_ROLE_NAME + ") VALUES ('Admin'), ('Natural Person'), ('Legal Entity');");
 
-        // ocation Types
+        // Location Types
         db.execSQL("INSERT INTO " + TABLE_LOCATION_TYPES + " (" + COLUMN_NAME + ") VALUES ('Hospital'), ('Health Center'), ('Medical Faculty');");
 
         // Admin User
         String adminFullName = "Admin User";
-        String adminEmail = "admin@example.com";
+        String adminEmail = "admin@blooddonor.com";
         String adminSalt = PasswordUtils.generateSalt();
         String adminPasswordHash = PasswordUtils.hashPassword("adminpassword", adminSalt);
 
@@ -149,12 +149,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_EMAIL + ", " +
                 COLUMN_PASSWORD + ", " +
                 COLUMN_SALT + ", " +
-                COLUMN_ROLE_ID + ") " +
+                COLUMN_ROLE_ID + ", " +
+                COLUMN_BLOOD_TYPE + ") " +
                 "VALUES ('" + adminFullName + "', '" +
                 adminEmail + "', '" +
                 adminPasswordHash + "', '" +
                 adminSalt + "', " +
-                "(SELECT " + COLUMN_ID + " FROM " + TABLE_ROLES + " WHERE " + COLUMN_ROLE_NAME + " = 'Admin'));");
+                "(SELECT " + COLUMN_ID + " FROM " + TABLE_ROLES + " WHERE " + COLUMN_ROLE_NAME + " = 'Admin'), " +
+                "'0+');");
     }
 
     @Override
