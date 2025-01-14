@@ -1,5 +1,5 @@
 <resources>
-    <string name="google_api_key">GOOGLE_API_KEY</string>
+    <string name="google_api_key">AIzaSyC0jgqs4KXewpKO1Md4Y59ui0SevrdIv_8</string>
     <string name="app_name">BloodDonor</string>
     <string name="app_title">Blood Donation</string>
     <string name="login">Login</string>
@@ -95,4 +95,17 @@
     <string name="location_updated">Location updated successfully.</string>
     <string name="location_update_error">Failed to update location.</string>
     <string name="no_changes_detected">No changes detected.</string>
+    <string name="search_by_name">Search By Name</string>
+    <string name="sort_by_location_type">Sort By Location Type</string>
+    <string name="location_details">Name: %1$s\nLocation: %2$s\nPhone Numbers: %3$s\nLocation Type: %4$s</string>
+    <string name="location_details_title">Location Details</string>
+    <string name="confirm_delete_title">Confirm Delete</string>
+    <string name="confirm_delete_message">Are you sure you want to delete this location?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">OK</string>
+    <string name="location_deleted">Location deleted successfully.</string>
+    <string name="error_deleting_location">Error deleting location.</string>
+    <string name="no_user_data_found">No user data found</string>
+    <string name="all">All</string>
 </resources>

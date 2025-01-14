@@ -3,6 +3,9 @@ package com.example.blooddonor.ui.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -17,26 +20,38 @@ import com.example.blooddonor.data.repositories.RoleRepositoryImpl;
 import com.example.blooddonor.domain.models.LocationDTO;
 import com.example.blooddonor.data.repositories.LocationRepositoryImpl;
 import com.example.blooddonor.data.repositories.LocationTypeRepositoryImpl;
+import com.example.blooddonor.domain.models.LocationTypeDTO;
 import com.example.blooddonor.domain.models.UserDTO;
 import com.example.blooddonor.domain.repositories.LocationRepository;
 import com.example.blooddonor.domain.repositories.LocationTypeRepository;
 import com.example.blooddonor.domain.repositories.RoleRepository;
+import com.example.blooddonor.domain.usecases.implementation.LocationTypeUseCaseImpl;
 import com.example.blooddonor.domain.usecases.implementation.LocationUseCaseImpl;
 import com.example.blooddonor.domain.usecases.implementation.RoleUseCaseImpl;
+import com.example.blooddonor.domain.usecases.interfaces.LocationTypeUseCase;
 import com.example.blooddonor.domain.usecases.interfaces.LocationUseCase;
 import com.example.blooddonor.domain.usecases.interfaces.RoleUseCase;
 import com.example.blooddonor.ui.adapters.LocationAdapter;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class LocationListActivity extends BaseActivity {
+
     private LocationAdapter locationAdapter;
+    private MaterialAutoCompleteTextView locationTypeDropdown;
+    private TextInputEditText searchInput;
+    private ActivityResultLauncher<Intent> editLocationLauncher;
+
     private LocationUseCase locationUseCase;
     private RoleUseCase roleUseCase;
+    private LocationTypeUseCase locationTypeUseCase;
+    private List<LocationDTO> allLocations;
 
     private UserDTO currentUser;
-
-    private ActivityResultLauncher<Intent> editLocationLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +63,7 @@ public class LocationListActivity extends BaseActivity {
         initializeDependencies();
         initializeCurrentUser();
         initializeActivityResultLauncher();
-        initializeUI();
+        initializeUIElements();
         loadLocations();
     }
 
@@ -59,13 +74,14 @@ public class LocationListActivity extends BaseActivity {
         RoleRepository roleRepository = new RoleRepositoryImpl(dbHelper);
         locationUseCase = new LocationUseCaseImpl(locationRepository, locationTypeRepository);
         roleUseCase = new RoleUseCaseImpl(roleRepository);
+        locationTypeUseCase = new LocationTypeUseCaseImpl(locationTypeRepository);
     }
 
-    private void initializeUI() {
+    private void initializeUIElements() {
         RecyclerView recyclerView = findViewById(R.id.location_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        locationAdapter = new LocationAdapter(locationUseCase.getAllLocations(), new LocationAdapter.OnLocationClickListener() {
+        locationAdapter = new LocationAdapter(new ArrayList<>(), new LocationAdapter.OnLocationClickListener() {
             @Override
             public void onLocationClick(LocationDTO location) {
                 showLocationDetails(location);
@@ -83,48 +99,127 @@ public class LocationListActivity extends BaseActivity {
         });
 
         recyclerView.setAdapter(locationAdapter);
+
+        locationTypeDropdown = findViewById(R.id.location_type_dropdown);
+        searchInput = findViewById(R.id.search_input);
+
+        setupLocationTypeDropdown();
+        setupSearchInput();
+    }
+
+    private void setupLocationTypeDropdown() {
+        List<LocationTypeDTO> locationTypes = locationTypeUseCase.getAllLocationTypes();
+
+        LocationTypeDTO allType = new LocationTypeDTO();
+        allType.setId(0);
+        allType.setName(getString(R.string.all));
+        locationTypes.add(0, allType);
+
+        List<String> locationTypeNames = new ArrayList<>();
+        for (LocationTypeDTO type : locationTypes) {
+            locationTypeNames.add(type.getName());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, locationTypeNames);
+        locationTypeDropdown.setAdapter(adapter);
+
+        locationTypeDropdown.setOnClickListener(v -> locationTypeDropdown.showDropDown());
+        locationTypeDropdown.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                locationTypeDropdown.showDropDown();
+            }
+        });
+
+        locationTypeDropdown.setOnItemClickListener((parent, view, position, id) -> {
+            filterLocationsBySelectedType(locationTypes.get(position));
+        });
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void filterLocationsBySelectedType(LocationTypeDTO selectedType) {
+        List<LocationDTO> filteredLocations = new ArrayList<>();
+
+        for (LocationDTO location : allLocations) {
+            if (selectedType.getId() == 0 || location.getLocationTypeId() == selectedType.getId()) {
+                filteredLocations.add(location);
+            }
+        }
+
+        locationAdapter.setLocations(filteredLocations);
+        locationAdapter.notifyDataSetChanged();
+    }
+
+    private void setupSearchInput() {
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterBySearch();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void filterBySearch() {
+        String query = Objects.requireNonNull(searchInput.getText()).toString().toLowerCase();
+
+        List<LocationDTO> filteredLocations = new ArrayList<>();
+        for (LocationDTO location : allLocations) {
+            if (location.getName().toLowerCase().contains(query)) {
+                filteredLocations.add(location);
+            }
+        }
+
+        locationAdapter.setLocations(filteredLocations);
+        locationAdapter.notifyDataSetChanged();
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private void loadLocations() {
-        List<LocationDTO> locations = locationUseCase.getAllLocations();
-        locationAdapter.setLocations(locations);
+        allLocations = locationUseCase.getAllLocations();
+        locationAdapter.setLocations(allLocations);
         locationAdapter.notifyDataSetChanged();
     }
 
     private void showLocationDetails(LocationDTO location) {
-        String locationDetails = "Name: " + location.getName() + "\n" +
-                "Location: " + location.getLocation() + "\n" +
-                "Phone Numbers: " + location.getPhoneNumbers() + "\n" +
-                "Location Type: " + location.getLocationTypeName();
+        String locationDetails = getString(R.string.location_details,
+                location.getName(),
+                location.getLocation(),
+                location.getPhoneNumbers(),
+                location.getLocationTypeName());
 
         new AlertDialog.Builder(this)
-                .setTitle("Location Details")
+                .setTitle(R.string.location_details_title)
                 .setMessage(locationDetails)
-                .setPositiveButton("OK", null)
+                .setPositiveButton(R.string.ok, null)
                 .show();
     }
 
     private void handleDeleteLocation(int locationId) {
         new AlertDialog.Builder(this)
-                .setTitle("Confirm Delete")
-                .setMessage("Are you sure you want to delete this location?")
-                .setPositiveButton("Yes", (dialog, which) -> {
+                .setTitle(R.string.confirm_delete_title)
+                .setMessage(R.string.confirm_delete_message)
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
                     if (locationUseCase.deleteLocation(locationId)) {
-                        showToast("Location deleted successfully.");
+                        showToast(getString(R.string.location_deleted));
                         loadLocations();
                     } else {
-                        showToast("Error deleting location.");
+                        showToast(getString(R.string.error_deleting_location));
                     }
                 })
-                .setNegativeButton("No", null)
+                .setNegativeButton(R.string.no, null)
                 .show();
     }
 
     private void initializeCurrentUser() {
         currentUser = getIntent().getParcelableExtra("userDTO");
         if (currentUser == null) {
-            Toast.makeText(this, "No user data found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.no_user_data_found, Toast.LENGTH_SHORT).show();
         }
         currentUser.setRoleName(roleUseCase.getRoleById(currentUser.getRoleId()).getRoleName());
     }
