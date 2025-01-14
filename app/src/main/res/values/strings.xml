@@ -1,5 +1,5 @@
 <resources>
-    <string name="google_api_key">API_KEY</string>
+    <string name="google_api_key">GOOGLE_API_KEY</string>
     <string name="app_name">BloodDonor</string>
     <string name="app_title">Blood Donation</string>
     <string name="login">Login</string>
