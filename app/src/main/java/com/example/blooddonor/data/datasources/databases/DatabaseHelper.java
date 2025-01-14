@@ -16,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_LOCATIONS = "locations";
     private static final String TABLE_LOCATION_TYPES = "location_types";
     private static final String TABLE_BLOOD_REQUESTS = "blood_requests";
-    private static final String TABLE_NEWS_AND_TIPS = "news_and_tips";
+    private static final String TABLE_NOTIFICATION = "notification";
     private static final String TABLE_FAQ = "faq";
 
     // Common Columns
@@ -51,7 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_CREATED_AT = "created_at";
     private static final String COLUMN_DEADLINE = "deadline";
 
-    // News and Tips Table
+    // Notification Table
     private static final String COLUMN_TITLE = "title";
     private static final String COLUMN_TEXT = "text";
     private static final String COLUMN_CREATED_DATE = "created_date";
@@ -103,7 +103,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "FOREIGN KEY (" + COLUMN_SUBMITTED_BY + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_ID + "), " +
             "FOREIGN KEY (" + COLUMN_LOCATION_ID + ") REFERENCES " + TABLE_LOCATIONS + "(" + COLUMN_ID + "));";
 
-    private static final String CREATE_TABLE_NEWS_AND_TIPS = "CREATE TABLE " + TABLE_NEWS_AND_TIPS + " (" +
+    private static final String CREATE_TABLE_NOTIFICATION = "CREATE TABLE " + TABLE_NOTIFICATION + " (" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_TITLE + " TEXT NOT NULL, " +
             COLUMN_TEXT + " TEXT NOT NULL, " +
@@ -125,16 +125,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_LOCATION_TYPES);
         db.execSQL(CREATE_TABLE_LOCATIONS);
         db.execSQL(CREATE_TABLE_BLOOD_REQUESTS);
-        db.execSQL(CREATE_TABLE_NEWS_AND_TIPS);
+        db.execSQL(CREATE_TABLE_NOTIFICATION);
         db.execSQL(CREATE_TABLE_FAQ);
 
-        // Insert default roles
+        seed(db);
+    }
+
+    private static void seed(SQLiteDatabase db) {
+        // Roles
         db.execSQL("INSERT INTO " + TABLE_ROLES + " (" + COLUMN_ROLE_NAME + ") VALUES ('Admin'), ('Natural Person'), ('Legal Entity');");
 
-        // Insert default location types
+        // ocation Types
         db.execSQL("INSERT INTO " + TABLE_LOCATION_TYPES + " (" + COLUMN_NAME + ") VALUES ('Hospital'), ('Health Center'), ('Medical Faculty');");
 
-        // Insert default admin user
+        // Admin User
         String adminFullName = "Admin User";
         String adminEmail = "admin@example.com";
         String adminSalt = PasswordUtils.generateSalt();
@@ -156,7 +160,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FAQ);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWS_AND_TIPS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTIFICATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BLOOD_REQUESTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOCATIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOCATION_TYPES);

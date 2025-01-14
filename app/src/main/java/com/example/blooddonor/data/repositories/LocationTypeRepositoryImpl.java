@@ -39,6 +39,22 @@ public class LocationTypeRepositoryImpl implements LocationTypeRepository {
     }
 
     @Override
+    public LocationType getLocationTypeByName(String name) {
+        SQLiteDatabase database = dbHelper.getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_LOCATION_TYPES + " WHERE " + COLUMN_NAME + " = ?", new String[]{String.valueOf(name)});
+        if (cursor.moveToFirst()) {
+            LocationType locationType = new LocationType(
+                    cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME))
+            );
+            cursor.close();
+            return locationType;
+        }
+        cursor.close();
+        return null;
+    }
+
+    @Override
     public List<LocationType> getAllLocationTypes() {
         List<LocationType> locationTypes = new ArrayList<>();
         SQLiteDatabase database = dbHelper.getReadableDatabase();
@@ -51,27 +67,5 @@ public class LocationTypeRepositoryImpl implements LocationTypeRepository {
         }
         cursor.close();
         return locationTypes;
-    }
-
-    @Override
-    public boolean insertLocationType(LocationType locationType) {
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME, locationType.getName());
-        return database.insert(TABLE_LOCATION_TYPES, null, values) != -1;
-    }
-
-    @Override
-    public boolean updateLocationType(LocationType locationType) {
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME, locationType.getName());
-        return database.update(TABLE_LOCATION_TYPES, values, COLUMN_ID + " = ?", new String[]{String.valueOf(locationType.getId())}) > 0;
-    }
-
-    @Override
-    public boolean deleteLocationType(int typeId) {
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
-        return database.delete(TABLE_LOCATION_TYPES, COLUMN_ID + " = ?", new String[]{String.valueOf(typeId)}) > 0;
     }
 }

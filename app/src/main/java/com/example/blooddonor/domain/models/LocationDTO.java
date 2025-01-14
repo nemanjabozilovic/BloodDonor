@@ -9,6 +9,7 @@ public class LocationDTO implements Parcelable {
     private String phoneNumbers;
     private String location;
     private int locationTypeId;
+    private String locationTypeName;
     private double longitude;
     private double latitude;
 
@@ -116,5 +117,13 @@ public class LocationDTO implements Parcelable {
 
     public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    public String getLocationTypeName() {
+        return locationTypeName;
+    }
+
+    public void setLocationTypeName(String locationTypeName) {
+        this.locationTypeName = locationTypeName;
     }
 }
