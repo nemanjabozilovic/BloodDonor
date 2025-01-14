@@ -61,11 +61,19 @@
             android:theme="@style/Theme.BloodDonor">
         </activity>
         <activity
-            android:name=".ui.activities.LocationsActivity"
+            android:name=".ui.activities.AddLocationActivity"
             android:theme="@style/Theme.BloodDonor">
         </activity>
         <activity
-            android:name=".ui.activities.NewsAndTipsActivity"
+            android:name=".ui.activities.LocationListActivity"
+            android:theme="@style/Theme.BloodDonor">
+        </activity>
+        <activity
+            android:name=".ui.activities.EditLocationActivity"
+            android:theme="@style/Theme.BloodDonor">
+        </activity>
+        <activity
+            android:name=".ui.activities.NotificationActivity"
             android:theme="@style/Theme.BloodDonor">
         </activity>
         <activity

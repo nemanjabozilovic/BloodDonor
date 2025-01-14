@@ -63,7 +63,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.navigation_view);
 
         if ("admin".equalsIgnoreCase(currentUser.getRoleName())) {
-            navigationView.getMenu().findItem(R.id.nav_locations).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_location_list).setVisible(true);
+            navigationView.getMenu().findItem(R.id.nav_add_location).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_users).setVisible(true);
         }
 
@@ -85,8 +86,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             case R.id.nav_profile:
                 navigateToActivity(ProfileActivity.class);
                 break;
-            case R.id.nav_locations:
-                navigateToActivity(LocationsActivity.class);
+            case R.id.nav_location_list:
+                navigateToActivity(LocationListActivity.class);
+                break;
+            case R.id.nav_add_location:
+                navigateToActivity(AddLocationActivity.class);
                 break;
             case R.id.nav_users:
                 navigateToActivity(UsersActivity.class);
@@ -95,7 +99,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 navigateToActivity(RequestBloodActivity.class);
                 break;
             case R.id.nav_notifications:
-                navigateToActivity(NewsAndTipsActivity.class);
+                navigateToActivity(NotificationActivity.class);
                 break;
             case R.id.nav_faq:
                 navigateToActivity(FaqActivity.class);
@@ -119,7 +123,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         userEmail.setText(currentUser.getEmail());
         profileImage.setImageResource(R.drawable.ic_profile_placeholder);
     }
-
 
     private void navigateToActivity(Class<?> activityClass) {
         Intent intent = new Intent(this, activityClass);

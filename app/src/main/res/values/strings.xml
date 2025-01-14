@@ -1,4 +1,5 @@
 <resources>
+    <string name="google_api_key">AIzaSyC0jgqs4KXewpKO1Md4Y59ui0SevrdIv_8</string>
     <string name="app_name">BloodDonor</string>
     <string name="app_title">Blood Donation</string>
     <string name="login">Login</string>
@@ -68,4 +69,30 @@
     <string name="donate_blood">Donate Blood</string>
     <string name="save_lives">Save Lives</string>
     <string name="active_blood_requests">Active Blood Requests</string>
+    <string name="search_location_hint">Search Location</string>
+    <string name="location_name_hint">Location Name</string>
+    <string name="phone_numbers_hint">Phone Numbers</string>
+    <string name="city_country_hint">City / Country</string>
+    <string name="latitude_hint">Latitude</string>
+    <string name="longitude_hint">Longitude</string>
+    <string name="location_type_hint">Location Type</string>
+    <string name="save_location">Save Location</string>
+    <string name="location_saved">Location saved successfully!</string>
+    <string name="location_save_error">Failed to save location. Please try again.</string>
+    <string name="location_search_failed">Failed to fetch location. Please try again.</string>
+    <string name="error_empty_location_name">Location name is required.</string>
+    <string name="error_empty_phone_numbers">Phone numbers are required.</string>
+    <string name="error_empty_city_country">City / Country is required.</string>
+    <string name="error_empty_latitude">Latitude is required.</string>
+    <string name="error_empty_longitude">Longitude is required.</string>
+    <string name="error_empty_location_type">Please select a location type.</string>
+    <string name="view_locations">Location List</string>
+    <string name="add_location">Add Location</string>
+    <string name="edit_location">Edit Location</string>
+    <string name="place_selected">Place selected: %1$s</string>
+    <string name="error_occurred">Error occurred: %1$s</string>
+    <string name="error_loading_location">Error loading location details.</string>
+    <string name="location_updated">Location updated successfully.</string>
+    <string name="location_update_error">Failed to update location.</string>
+    <string name="no_changes_detected">No changes detected.</string>
 </resources>

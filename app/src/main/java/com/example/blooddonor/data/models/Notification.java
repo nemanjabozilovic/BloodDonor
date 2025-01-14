@@ -1,12 +1,12 @@
 package com.example.blooddonor.data.models;
 
-public class NewsAndTips {
+public class Notification {
     private int id;
     private String title;
     private String text;
     private String createdDate;
 
-    public NewsAndTips(int id, String title, String text, String createdDate) {
+    public Notification(int id, String title, String text, String createdDate) {
         this.id = id;
         this.title = title;
         this.text = text;

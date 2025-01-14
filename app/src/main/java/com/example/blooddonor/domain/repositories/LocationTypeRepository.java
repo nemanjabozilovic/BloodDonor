@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface LocationTypeRepository {
     LocationType getLocationTypeById(int id);
+    LocationType getLocationTypeByName(String name);
     List<LocationType> getAllLocationTypes();
-    boolean insertLocationType(LocationType locationType);
-    boolean updateLocationType(LocationType locationType);
-    boolean deleteLocationType(int id);
 }

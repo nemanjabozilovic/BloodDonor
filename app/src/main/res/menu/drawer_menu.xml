@@ -16,9 +16,14 @@
             android:title="@string/users"
             android:visible="false" />
         <item
-            android:id="@+id/nav_locations"
+            android:id="@+id/nav_location_list"
             android:icon="@drawable/ic_location"
-            android:title="@string/locations"
+            android:title="@string/view_locations"
+            android:visible="false" />
+        <item
+            android:id="@+id/nav_add_location"
+            android:icon="@drawable/ic_add_location"
+            android:title="@string/add_location"
             android:visible="false" />
         <item
             android:id="@+id/nav_request_blood"

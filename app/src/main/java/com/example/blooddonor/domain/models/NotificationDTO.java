@@ -3,37 +3,37 @@ package com.example.blooddonor.domain.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class NewsAndTipsDTO implements Parcelable {
+public class NotificationDTO implements Parcelable {
     private int id;
     private String title;
     private String text;
     private String createdDate;
 
-    public NewsAndTipsDTO() {}
+    public NotificationDTO() {}
 
-    public NewsAndTipsDTO(int id, String title, String text, String createdDate) {
+    public NotificationDTO(int id, String title, String text, String createdDate) {
         this.id = id;
         this.title = title;
         this.text = text;
         this.createdDate = createdDate;
     }
 
-    protected NewsAndTipsDTO(Parcel in) {
+    protected NotificationDTO(Parcel in) {
         id = in.readInt();
         title = in.readString();
         text = in.readString();
         createdDate = in.readString();
     }
 
-    public static final Creator<NewsAndTipsDTO> CREATOR = new Creator<NewsAndTipsDTO>() {
+    public static final Creator<NotificationDTO> CREATOR = new Creator<NotificationDTO>() {
         @Override
-        public NewsAndTipsDTO createFromParcel(Parcel in) {
-            return new NewsAndTipsDTO(in);
+        public NotificationDTO createFromParcel(Parcel in) {
+            return new NotificationDTO(in);
         }
 
         @Override
-        public NewsAndTipsDTO[] newArray(int size) {
-            return new NewsAndTipsDTO[size];
+        public NotificationDTO[] newArray(int size) {
+            return new NotificationDTO[size];
         }
     };
 
