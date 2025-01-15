@@ -64,7 +64,9 @@
                     android:inputType="number"
                     android:drawableStart="@drawable/ic_key"
                     android:drawablePadding="12dp"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:fontFamily="@font/exo_regular"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -87,7 +89,8 @@
                 app:cornerRadius="4dp"
                 app:rippleColor="@color/lighter_red"
                 android:text="@string/verify"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/exo_regular" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

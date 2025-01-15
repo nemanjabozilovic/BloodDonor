@@ -26,6 +26,8 @@ import com.example.blooddonor.domain.usecases.implementation.RoleUseCaseImpl;
 import com.example.blooddonor.domain.usecases.implementation.UserUseCaseImpl;
 import com.example.blooddonor.domain.usecases.interfaces.RoleUseCase;
 import com.example.blooddonor.domain.usecases.interfaces.UserUseCase;
+import com.example.blooddonor.utils.EmailSender;
+import com.example.blooddonor.utils.EmailTemplates;
 import com.example.blooddonor.utils.EmailValidator;
 import com.example.blooddonor.utils.PasswordUtils;
 import com.example.blooddonor.utils.UserAlreadyExistsException;
@@ -45,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private UserUseCase userUseCase;
     private RoleUseCase roleUseCase;
+    private EmailSender emailSender;
 
     private String selectedBloodType;
     private String selectedRole;
@@ -66,6 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         roleUseCase = new RoleUseCaseImpl(roleRepository);
         userUseCase = new UserUseCaseImpl(userRepository, roleRepository);
+        emailSender = new EmailSender("office@blooddonor.com");
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -159,6 +163,7 @@ public class RegisterActivity extends AppCompatActivity {
             if (createdUser != null) {
                 showToast(getString(R.string.register_success));
                 navigateToHome(createdUser);
+                sendWelcomeEmail(createdUser);
             } else {
                 showToast(getString(R.string.register_error));
             }
@@ -167,6 +172,27 @@ public class RegisterActivity extends AppCompatActivity {
         } catch (Exception e) {
             showToast(getString(R.string.register_error));
         }
+    }
+
+    private void sendWelcomeEmail(UserDTO user) {
+        String subject = EmailTemplates.getWelcomeSubject();
+        String body = EmailTemplates.getNewUserWelcomeTemplate(user.getFullName());
+        String email = user.getEmail();
+
+        emailSender.sendEmail(
+                email,
+                subject,
+                body,
+                new EmailSender.EmailSendCallback() {
+                    @Override
+                    public void onSuccess() {
+                    }
+
+                    @Override
+                    public void onFailure(String errorMessage) {
+                    }
+                }
+        );
     }
 
     private String getFieldValue(TextInputEditText field) {

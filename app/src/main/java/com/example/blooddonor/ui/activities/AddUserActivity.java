@@ -173,7 +173,7 @@ public class AddUserActivity extends BaseActivity {
 
             if (createdUser != null) {
                 Toast.makeText(this, getString(R.string.user_saved_successfully), Toast.LENGTH_SHORT).show();
-                sendWelcomeEmail(createdUser, email);
+                sendWelcomeEmail(createdUser);
                 openUserListActivity(createdUser);
             } else {
                 Toast.makeText(this, getString(R.string.user_save_error), Toast.LENGTH_SHORT).show();
@@ -183,9 +183,10 @@ public class AddUserActivity extends BaseActivity {
         }
     }
 
-    private void sendWelcomeEmail(UserDTO user, String email) {
+    private void sendWelcomeEmail(UserDTO user) {
         String subject = EmailTemplates.getWelcomeSubject();
         String body = EmailTemplates.getNewUserWelcomeTemplate(user.getFullName());
+        String email = user.getEmail();
 
         emailSender.sendEmail(
                 email,

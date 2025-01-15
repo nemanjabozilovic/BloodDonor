@@ -57,7 +57,9 @@
                     android:inputType="textPersonName"
                     android:drawableStart="@drawable/ic_user"
                     android:drawablePadding="12dp"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:fontFamily="@font/exo_regular"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -77,7 +79,9 @@
                     android:inputType="textEmailAddress"
                     android:drawableStart="@drawable/ic_email"
                     android:drawablePadding="12dp"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:fontFamily="@font/exo_regular"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -98,7 +102,9 @@
                     android:inputType="textPassword"
                     android:drawableStart="@drawable/ic_lock"
                     android:drawablePadding="12dp"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:fontFamily="@font/exo_regular"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -142,7 +148,9 @@
                     android:focusableInTouchMode="true"
                     android:drawableStart="@drawable/ic_role"
                     android:drawablePadding="12dp"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:fontFamily="@font/exo_regular"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -165,7 +173,8 @@
                 app:cornerRadius="4dp"
                 app:rippleColor="@color/lighter_red"
                 android:text="@string/register"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/exo_regular"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

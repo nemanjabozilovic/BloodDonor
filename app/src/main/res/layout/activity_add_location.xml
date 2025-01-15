@@ -42,7 +42,9 @@
                     android:focusable="false"
                     android:drawableStart="@drawable/ic_location_search"
                     android:drawablePadding="12dp"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:fontFamily="@font/exo_regular"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -61,7 +63,9 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_location_name"
                     android:drawablePadding="12dp"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:fontFamily="@font/exo_regular"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -81,7 +85,9 @@
                     android:inputType="phone"
                     android:drawableStart="@drawable/ic_phone"
                     android:drawablePadding="12dp"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:fontFamily="@font/exo_regular"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -100,7 +106,9 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_location"
                     android:drawablePadding="12dp"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:fontFamily="@font/exo_regular"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -120,7 +128,9 @@
                     android:inputType="numberDecimal"
                     android:drawableStart="@drawable/ic_coordinates"
                     android:drawablePadding="12dp"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:fontFamily="@font/exo_regular"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -140,7 +150,9 @@
                     android:inputType="numberDecimal"
                     android:drawableStart="@drawable/ic_coordinates"
                     android:drawablePadding="12dp"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:fontFamily="@font/exo_regular"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -159,7 +171,9 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_location"
                     android:drawablePadding="12dp"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:fontFamily="@font/exo_regular"
+                    android:textColor="@color/black" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -172,7 +186,8 @@
                 app:cornerRadius="4dp"
                 app:rippleColor="@color/lighter_red"
                 android:text="@string/save_location"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/exo_regular" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
