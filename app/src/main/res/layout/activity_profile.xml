@@ -8,7 +8,7 @@
     <View
         android:id="@+id/header_background"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="190dp"
         android:background="@drawable/curved_background" />
 
     <ImageView
@@ -21,17 +21,6 @@
         android:background="@drawable/profile_header_circle_backgorund"
         android:elevation="8dp"
         android:padding="8dp" />
-
-    <ImageButton
-        android:id="@+id/edit_profile_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_edit"
-        android:background="@null"
-        app:tint="@color/white" />
 
     <TextView
         android:id="@+id/user_name"
@@ -94,8 +83,8 @@
         android:id="@+id/blood_requests_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
+        android:layout_below="@id/blood_request_title"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_below="@id/blood_request_title" />
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp" />
 </RelativeLayout>

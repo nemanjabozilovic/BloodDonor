@@ -1,5 +1,5 @@
 <resources>
-    <string name="google_api_key">AIzaSyC0jgqs4KXewpKO1Md4Y59ui0SevrdIv_8</string>
+    <string name="google_api_key">GOOGLE_API_KEY</string>
     <string name="app_name">BloodDonor</string>
     <string name="app_title">Blood Donation</string>
     <string name="login">Login</string>
@@ -132,4 +132,7 @@
     <string name="patient_name">Patient Name</string>
     <string name="needed_by">Needed By</string>
     <string name="details">Details</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="profile_updated">Profile updated successfully.</string>
+    <string name="error_updating_profile">Failed to update profile.</string>
 </resources>

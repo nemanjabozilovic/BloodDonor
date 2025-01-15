@@ -173,7 +173,10 @@
                     android:drawablePadding="12dp"
                     android:padding="12dp"
                     android:fontFamily="@font/exo_regular"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
