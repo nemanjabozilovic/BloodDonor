@@ -3,6 +3,7 @@ package com.example.blooddonor.ui.activities;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import com.example.blooddonor.domain.usecases.interfaces.RoleUseCase;
 import com.google.android.material.navigation.NavigationView;
 
 public abstract class BaseActivity extends AppCompatActivity {
+
     private DrawerLayout drawerLayout;
 
     private RoleUseCase roleUseCase;
@@ -173,5 +175,20 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    protected void refreshNavHeader(UserDTO updatedCurrentUser) {
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+
+        View headerView = navigationView.getHeaderView(0);
+        if (headerView != null && updatedCurrentUser != null) {
+            ImageView profileImage = headerView.findViewById(R.id.profile_image);
+            TextView userName = headerView.findViewById(R.id.user_name);
+            TextView userEmail = headerView.findViewById(R.id.user_email);
+
+            userName.setText(updatedCurrentUser.getFullName());
+            userEmail.setText(updatedCurrentUser.getEmail());
+            profileImage.setImageResource(R.drawable.ic_profile_placeholder);
+        }
     }
 }

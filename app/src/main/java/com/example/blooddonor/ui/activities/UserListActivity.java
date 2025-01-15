@@ -229,6 +229,12 @@ public class UserListActivity extends BaseActivity {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
+                        UserDTO updatedSelectedUser = Objects.requireNonNull(result.getData()).getParcelableExtra("user");
+                        UserDTO updatedCurrentUser = result.getData().getParcelableExtra("userDTO");
+                        if (Objects.requireNonNull(updatedSelectedUser).getId()
+                                == Objects.requireNonNull(updatedCurrentUser).getId()) {
+                            refreshNavHeader(updatedSelectedUser);
+                        }
                         loadUsers();
                     }
                 }

@@ -106,7 +106,8 @@
     <string name="ok">OK</string>
     <string name="location_deleted">Location deleted successfully.</string>
     <string name="error_deleting_location">Error deleting location.</string>
-    <string name="no_user_data_found">No user data found</string>
+    <string name="no_user_data_found">No data found for the logged-in user.</string>
+    <string name="no_selected_user_data_found">No data found for the selected user.</string>
     <string name="all">All</string>
     <string name="add_user">Add User</string>
     <string name="save_user">Save User</string>

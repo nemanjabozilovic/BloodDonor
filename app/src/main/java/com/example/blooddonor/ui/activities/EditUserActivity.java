@@ -43,7 +43,7 @@ public class EditUserActivity extends BaseActivity {
     private TextInputLayout fullNameInputLayout, emailInputLayout, roleInputLayout, bloodTypeInputLayout;
     private MaterialButton saveUserButton, change_password_button;
 
-    private UserDTO selectedUser;
+    private UserDTO currentUser, selectedUser;
     private String selectedRole, selectedBloodType;
 
     @Override
@@ -54,6 +54,7 @@ public class EditUserActivity extends BaseActivity {
         setTitle(R.string.edit_user);
 
         initializeDependencies();
+        initializeCurrentUser();
         initializeSelectedUser();
         initializeUIElements();
         setupListeners();
@@ -69,11 +70,20 @@ public class EditUserActivity extends BaseActivity {
         userUseCase = new UserUseCaseImpl(userRepository, roleRepository);
     }
 
+    private void initializeCurrentUser() {
+        currentUser = getIntent().getParcelableExtra("userDTO");
+        if (currentUser == null) {
+            Toast.makeText(this, R.string.no_user_data_found, Toast.LENGTH_SHORT).show();
+        }
+        currentUser.setRoleName(roleUseCase.getRoleById(currentUser.getRoleId()).getRoleName());
+    }
+
     private void initializeSelectedUser() {
         selectedUser = getIntent().getParcelableExtra("user");
-        if (selectedUser != null) {
-            selectedUser.setRoleName(roleUseCase.getRoleById(selectedUser.getRoleId()).getRoleName());
+        if (selectedUser == null) {
+            Toast.makeText(this, R.string.no_selected_user_data_found, Toast.LENGTH_SHORT).show();
         }
+        selectedUser.setRoleName(roleUseCase.getRoleById(selectedUser.getRoleId()).getRoleName());
     }
 
     private void initializeUIElements() {
@@ -220,6 +230,7 @@ public class EditUserActivity extends BaseActivity {
     private void returnUpdatedUser(UserDTO selectedUser) {
         Intent resultIntent = new Intent();
         resultIntent.putExtra("user", selectedUser);
+        resultIntent.putExtra("userDTO", currentUser);
         setResult(RESULT_OK, resultIntent);
         finish();
     }
