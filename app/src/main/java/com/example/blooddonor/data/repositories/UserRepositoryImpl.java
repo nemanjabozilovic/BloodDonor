@@ -158,6 +158,16 @@ public class UserRepositoryImpl implements UserRepository {
         return rowsAffected > 0;
     }
 
+    @Override
+    public boolean updateProfilePicture(int userId, String profilePicturePath) {
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PROFILE_PICTURE, profilePicturePath);
+
+        int rowsAffected = database.update(TABLE_USERS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(userId)});
+        return rowsAffected > 0;
+    }
+
     private User mapCursorToUser(Cursor cursor) {
         return new User(
                 cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),

@@ -1,10 +1,7 @@
 package com.example.blooddonor.ui.activities;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowInsets;
@@ -20,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.bumptech.glide.Glide;
 import com.example.blooddonor.R;
 import com.example.blooddonor.data.datasources.databases.DatabaseHelper;
 import com.example.blooddonor.data.repositories.RoleRepositoryImpl;
@@ -141,7 +139,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         userName.setText(currentUser.getFullName());
         userEmail.setText(currentUser.getEmail());
-        profileImage.setImageResource(R.drawable.ic_profile_placeholder);
+        initializeProfilePicture(currentUser, profileImage);
     }
 
     private void navigateToActivity(Class<?> activityClass) {
@@ -191,6 +189,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         });
     }
 
+    private void initializeProfilePicture(UserDTO updatedCurrentUser, ImageView profileImage) {
+        String profilePicturePath = updatedCurrentUser.getProfilePicture();
+        if (profilePicturePath != null && !profilePicturePath.isEmpty()) {
+            Glide.with(this)
+                    .load(profilePicturePath)
+                    .placeholder(R.drawable.ic_profile_placeholder)
+                    .into(profileImage);
+        } else {
+            profileImage.setImageResource(R.drawable.ic_profile_placeholder);
+        }
+    }
+
     protected void refreshNavHeader(UserDTO updatedCurrentUser) {
         NavigationView navigationView = findViewById(R.id.navigation_view);
 
@@ -202,7 +212,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             userName.setText(updatedCurrentUser.getFullName());
             userEmail.setText(updatedCurrentUser.getEmail());
-            profileImage.setImageResource(R.drawable.ic_profile_placeholder);
+
+            initializeProfilePicture(updatedCurrentUser, profileImage);
         }
     }
 }

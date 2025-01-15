@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.splashscreen.v100)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.activity)
     implementation(libs.android.mail)
     implementation(libs.android.activation)
     implementation(libs.places)

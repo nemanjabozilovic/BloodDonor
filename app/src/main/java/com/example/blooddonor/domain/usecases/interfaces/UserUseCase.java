@@ -1,6 +1,8 @@
 package com.example.blooddonor.domain.usecases.interfaces;
 
-import com.example.blooddonor.data.models.User;
+import android.content.Context;
+import android.net.Uri;
+
 import com.example.blooddonor.domain.models.UserDTO;
 
 import java.util.List;
@@ -16,4 +18,5 @@ public interface UserUseCase {
     boolean updateVerificationCode(String email, int verificationCode);
     UserDTO getUserByEmail(String email);
     boolean updatePassword(String email, String hashedPassword, String salt);
+    String saveProfilePicture(int userId, Context context, Uri imageUri, String existingFilePath);
 }

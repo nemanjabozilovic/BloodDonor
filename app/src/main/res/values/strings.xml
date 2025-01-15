@@ -126,7 +126,7 @@
     <string name="edit_user">Edit User</string>
     <string name="user_updated_successfully">User updated successfully.</string>
     <string name="error_updating_user">Failed to update user.</string>
-    <string name="new_password_saved">New password saved.</string>
+    <string name="new_password_saved">New password is set! Save changes to apply them.</string>
     <string name="blood_type">Blood Type</string>
     <string name="location">Location</string>
     <string name="patient_name">Patient Name</string>
@@ -135,4 +135,15 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="profile_updated">Profile updated successfully.</string>
     <string name="error_updating_profile">Failed to update profile.</string>
+    <string name="error_invalid_image">Invalid image format or size. Only JPG, JPEG, and PNG formats up to 2 MB are allowed.</string>
+    <string name="profile_picture_updated">Profile picture updated successfully!</string>
+    <string name="error_creating_directory">Failed to create directory for images.</string>
+    <string name="error_saving_image">Error saving the image. Please try again.</string>
+    <string name="failed_to_open_input_stream">Failed to open input stream for URI: </string>
+    <string name="error_image_not_found">Image not found.</string>
+    <string name="no_image_selected">No image selected. Please select an image.</string>
+    <string name="tap_to_select_image">Tap on the image to select a new one</string>
+    <string name="error_empty_new_password">Please enter your new password.</string>
+    <string name="error_empty_confirm_password">Please enter confirm password.</string>
+    <string name="error_empty_fields">Please fill in all fields.</string>
 </resources>

@@ -20,6 +20,8 @@ import com.example.blooddonor.utils.PasswordUtils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Objects;
+
 public class ChangePasswordActivity extends AppCompatActivity {
 
     private TextInputEditText newPasswordField, confirmPasswordField;
@@ -68,18 +70,18 @@ public class ChangePasswordActivity extends AppCompatActivity {
     }
 
     private void handleChangePassword() {
-        String newPassword = newPasswordField.getText().toString().trim();
-        String confirmPassword = confirmPasswordField.getText().toString().trim();
+        String newPassword = Objects.requireNonNull(newPasswordField.getText()).toString().trim();
+        String confirmPassword = Objects.requireNonNull(confirmPasswordField.getText()).toString().trim();
 
         clearErrors();
 
         if (TextUtils.isEmpty(newPassword)) {
-            newPasswordInputLayout.setError(getString(R.string.error_empty_password));
+            newPasswordInputLayout.setError(getString(R.string.error_empty_new_password));
             return;
         }
 
         if (TextUtils.isEmpty(confirmPassword)) {
-            confirmPasswordInputLayout.setError(getString(R.string.error_empty_password));
+            confirmPasswordInputLayout.setError(getString(R.string.error_empty_confirm_password));
             return;
         }
 

@@ -3,7 +3,9 @@ package com.example.blooddonor.ui.activities;
 import static com.example.blooddonor.utils.TextInputHelper.addTextWatcher;
 import static com.example.blooddonor.utils.TextInputHelper.clearError;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -15,6 +17,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +30,6 @@ import com.example.blooddonor.data.repositories.BloodRequestRepositoryImpl;
 import com.example.blooddonor.data.repositories.LocationRepositoryImpl;
 import com.example.blooddonor.data.repositories.RoleRepositoryImpl;
 import com.example.blooddonor.data.repositories.UserRepositoryImpl;
-import com.example.blooddonor.domain.models.BloodRequestDTO;
 import com.example.blooddonor.domain.models.UserDTO;
 import com.example.blooddonor.domain.repositories.BloodRequestRepository;
 import com.example.blooddonor.domain.repositories.LocationRepository;
@@ -39,13 +43,13 @@ import com.example.blooddonor.domain.usecases.interfaces.RoleUseCase;
 import com.example.blooddonor.domain.usecases.interfaces.UserUseCase;
 import com.example.blooddonor.ui.adapters.BloodRequestAdapter;
 import com.example.blooddonor.utils.EmailValidator;
+import com.example.blooddonor.utils.ImageUploadHelper;
 import com.example.blooddonor.utils.PasswordUtils;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class ProfileActivity extends BaseActivity {
@@ -61,17 +65,19 @@ public class ProfileActivity extends BaseActivity {
 
     private UserDTO currentUser;
 
+    private ActivityResultLauncher<PickVisualMediaRequest> imagePickerLauncher;
+    private Uri selectedImageUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         getLayoutInflater().inflate(R.layout.activity_profile, findViewById(R.id.content_frame));
         setActiveMenuItem(R.id.nav_profile);
         setTitle(R.string.profile);
-
         initializeDependencies();
         initializeCurrentUser();
         initializeUIElements();
+        setupImagePickerLauncher();
         loadUserData();
         loadBloodRequests();
     }
@@ -100,19 +106,33 @@ public class ProfileActivity extends BaseActivity {
         profileImage = findViewById(R.id.profile_image);
         userName = findViewById(R.id.user_name);
         userEmail = findViewById(R.id.user_email);
-
         RecyclerView bloodRequestRecyclerView = findViewById(R.id.blood_requests_recycler_view);
         bloodRequestRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         bloodRequestAdapter = new BloodRequestAdapter(new ArrayList<>());
         bloodRequestRecyclerView.setAdapter(bloodRequestAdapter);
+    }
+
+    private void setupImagePickerLauncher() {
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.PickVisualMedia(),
+                uri -> {
+                    if (uri != null) {
+                        selectedImageUri = uri;
+                        Glide.with(this)
+                                .load(selectedImageUri)
+                                .placeholder(R.drawable.ic_profile_placeholder)
+                                .into(profileImage);
+                    } else {
+                        Toast.makeText(this, R.string.no_image_selected, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
     private void loadUserData() {
         if (currentUser != null) {
             userName.setText(currentUser.getFullName());
             userEmail.setText(currentUser.getEmail());
-
             Glide.with(this)
                     .load(currentUser.getProfilePicture())
                     .placeholder(R.drawable.ic_profile_placeholder)
@@ -121,8 +141,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void loadBloodRequests() {
-        List<BloodRequestDTO> bloodRequests = bloodRequestUseCase.getAllBloodRequests();
-        bloodRequestAdapter.updateData(bloodRequests);
+        bloodRequestAdapter.updateData(bloodRequestUseCase.getAllBloodRequests());
     }
 
     @Override
@@ -140,29 +159,40 @@ public class ProfileActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void openEditProfileDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.edit_profile);
-
         final View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_profile, null);
         builder.setView(dialogView);
 
+        ImageView profileImageView = dialogView.findViewById(R.id.profile_image);
         TextInputEditText fullNameField = dialogView.findViewById(R.id.full_name);
         TextInputEditText emailField = dialogView.findViewById(R.id.email);
         TextInputLayout fullNameInputLayout = dialogView.findViewById(R.id.full_name_input_layout);
         TextInputLayout emailInputLayout = dialogView.findViewById(R.id.email_input_layout);
         AutoCompleteTextView bloodTypeDropdown = dialogView.findViewById(R.id.blood_type_dropdown);
         MaterialButton changePasswordButton = dialogView.findViewById(R.id.change_password_button);
-        changePasswordButton.setOnClickListener(v -> showChangePasswordDialog());
-
-        addTextWatcher(fullNameField, fullNameInputLayout);
-        addTextWatcher(emailField, emailInputLayout);
-
         fullNameField.setText(currentUser.getFullName());
         emailField.setText(currentUser.getEmail());
         bloodTypeDropdown.setText(currentUser.getBloodType(), false);
 
+        addTextWatcher(fullNameField, fullNameInputLayout);
+        addTextWatcher(emailField, emailInputLayout);
+
+        Glide.with(this).load(currentUser.getProfilePicture()).placeholder(R.drawable.ic_profile_placeholder).into(profileImageView);
+
         populateBloodTypeDropdown(bloodTypeDropdown);
+
+        changePasswordButton.setOnClickListener(v -> openChangePasswordDialog());
+
+        profileImageView.setOnClickListener(v ->
+                imagePickerLauncher.launch(
+                        new PickVisualMediaRequest.Builder()
+                                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                                .build()
+                )
+        );
 
         builder.setPositiveButton(R.string.save, (dialog, which) -> {
             String fullName = Objects.requireNonNull(fullNameField.getText()).toString().trim();
@@ -171,13 +201,13 @@ public class ProfileActivity extends BaseActivity {
             clearError(fullNameInputLayout);
             clearError(emailInputLayout);
 
-            if (TextUtils.isEmpty(email)) {
-                emailInputLayout.setError(getString(R.string.error_empty_email));
+            if (TextUtils.isEmpty(fullName) || TextUtils.isEmpty(email)) {
+                Toast.makeText(this, R.string.error_empty_fields, Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (!EmailValidator.isValidEmail(email)) {
-                emailInputLayout.setError(getString(R.string.error_invalid_email));
+                Toast.makeText(this, R.string.error_invalid_email, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -185,6 +215,15 @@ public class ProfileActivity extends BaseActivity {
             currentUser.setEmail(email);
             currentUser.setRoleName(currentUser.getRoleName());
             currentUser.setBloodType(bloodTypeDropdown.getText().toString());
+
+            if (selectedImageUri != null) {
+                try {
+                    String savedPath = ImageUploadHelper.saveImageToAppStorage(this, selectedImageUri, currentUser.getProfilePicture());
+                    currentUser.setProfilePicture(savedPath);
+                } catch (Exception e) {
+                    Toast.makeText(this, R.string.error_saving_image, Toast.LENGTH_SHORT).show();
+                }
+            }
 
             if (userUseCase.updateUser(currentUser) != null) {
                 Toast.makeText(this, R.string.profile_updated, Toast.LENGTH_SHORT).show();
@@ -199,22 +238,27 @@ public class ProfileActivity extends BaseActivity {
         builder.show();
     }
 
-    private void showChangePasswordDialog() {
+    private void openChangePasswordDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.change_password);
-
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_password, null);
         builder.setView(dialogView);
 
         TextInputEditText newPasswordField = dialogView.findViewById(R.id.new_password_field);
         TextInputEditText confirmPasswordField = dialogView.findViewById(R.id.confirm_password_field);
+        TextInputLayout newPasswordInputLayout = dialogView.findViewById(R.id.new_password_input_layout);
+        TextInputLayout confirmPasswordInputLayout = dialogView.findViewById(R.id.confirm_password_input_layout);
+
 
         builder.setPositiveButton(R.string.save, (dialog, which) -> {
             String newPassword = Objects.requireNonNull(newPasswordField.getText()).toString().trim();
             String confirmPassword = Objects.requireNonNull(confirmPasswordField.getText()).toString().trim();
 
+            clearError(newPasswordInputLayout);
+            clearError(confirmPasswordInputLayout);
+
             if (TextUtils.isEmpty(newPassword) || TextUtils.isEmpty(confirmPassword)) {
-                Toast.makeText(this, R.string.error_empty_password, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.error_empty_fields, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -225,7 +269,6 @@ public class ProfileActivity extends BaseActivity {
 
             String salt = PasswordUtils.generateSalt();
             String hashedPassword = PasswordUtils.hashPassword(newPassword, salt);
-
             currentUser.setPassword(hashedPassword);
             currentUser.setSalt(salt);
 

@@ -15,4 +15,5 @@ public interface UserRepository {
     boolean updateVerificationCode(String email, int verificationCode);
     User getUserByEmail(String email);
     boolean updatePassword(String email, String hashedPassword, String salt);
+    boolean updateProfilePicture(int userId, String profilePicturePath);
 }

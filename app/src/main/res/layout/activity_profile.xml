@@ -18,9 +18,12 @@
         android:layout_marginTop="100dp"
         android:layout_centerHorizontal="true"
         android:src="@drawable/ic_profile_placeholder"
-        android:background="@drawable/profile_header_circle_backgorund"
+        android:background="@drawable/profile_header_circle_background"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
         android:elevation="8dp"
-        android:padding="8dp" />
+        android:padding="0dp"
+        android:clipToOutline="true" />
 
     <TextView
         android:id="@+id/user_name"
