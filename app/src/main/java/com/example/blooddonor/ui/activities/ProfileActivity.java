@@ -5,6 +5,7 @@ import static com.example.blooddonor.utils.TextInputHelper.clearError;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -24,6 +25,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.blooddonor.R;
 import com.example.blooddonor.data.datasources.databases.DatabaseHelper;
 import com.example.blooddonor.data.repositories.BloodRequestRepositoryImpl;
@@ -49,7 +52,10 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ProfileActivity extends BaseActivity {
@@ -118,10 +124,8 @@ public class ProfileActivity extends BaseActivity {
                 uri -> {
                     if (uri != null) {
                         selectedImageUri = uri;
-                        Glide.with(this)
-                                .load(selectedImageUri)
-                                .placeholder(R.drawable.ic_profile_placeholder)
-                                .into(profileImage);
+                        Glide.with(profileImage.getContext()).load(selectedImageUri).placeholder(R.drawable.ic_profile_placeholder).into(profileImage);
+                        Toast.makeText(this, R.string.profile_image_saved, Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(this, R.string.no_image_selected, Toast.LENGTH_SHORT).show();
                     }
@@ -169,22 +173,35 @@ public class ProfileActivity extends BaseActivity {
         ImageView profileImageView = dialogView.findViewById(R.id.profile_image);
         TextInputEditText fullNameField = dialogView.findViewById(R.id.full_name);
         TextInputEditText emailField = dialogView.findViewById(R.id.email);
+        TextInputEditText dateOfBirthField = dialogView.findViewById(R.id.date_of_birth);
         TextInputLayout fullNameInputLayout = dialogView.findViewById(R.id.full_name_input_layout);
         TextInputLayout emailInputLayout = dialogView.findViewById(R.id.email_input_layout);
+        TextInputLayout dateOfBirthInputLayout = dialogView.findViewById(R.id.date_of_birth_input_layout);
         AutoCompleteTextView bloodTypeDropdown = dialogView.findViewById(R.id.blood_type_dropdown);
         MaterialButton changePasswordButton = dialogView.findViewById(R.id.change_password_button);
         fullNameField.setText(currentUser.getFullName());
         emailField.setText(currentUser.getEmail());
+        dateOfBirthField.setText(currentUser.getDateOfBirth());
         bloodTypeDropdown.setText(currentUser.getBloodType(), false);
 
         addTextWatcher(fullNameField, fullNameInputLayout);
         addTextWatcher(emailField, emailInputLayout);
+        addTextWatcher(dateOfBirthField, dateOfBirthInputLayout);
 
         Glide.with(this).load(currentUser.getProfilePicture()).placeholder(R.drawable.ic_profile_placeholder).into(profileImageView);
 
         populateBloodTypeDropdown(bloodTypeDropdown);
 
         changePasswordButton.setOnClickListener(v -> openChangePasswordDialog());
+        dateOfBirthField.setOnClickListener(v -> {
+            final Calendar calendar = Calendar.getInstance();
+            new DatePickerDialog(v.getContext(), (datePicker, year, month, dayOfMonth) -> {
+                calendar.set(year, month, dayOfMonth);
+                String formattedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.getTime());
+                dateOfBirthField.setText(formattedDate);
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+        });
+
 
         profileImageView.setOnClickListener(v ->
                 imagePickerLauncher.launch(
@@ -197,11 +214,13 @@ public class ProfileActivity extends BaseActivity {
         builder.setPositiveButton(R.string.save, (dialog, which) -> {
             String fullName = Objects.requireNonNull(fullNameField.getText()).toString().trim();
             String email = Objects.requireNonNull(emailField.getText()).toString().trim();
+            String dateOfBirth = Objects.requireNonNull(dateOfBirthField.getText()).toString().trim();
 
             clearError(fullNameInputLayout);
             clearError(emailInputLayout);
+            clearError(dateOfBirthInputLayout);
 
-            if (TextUtils.isEmpty(fullName) || TextUtils.isEmpty(email)) {
+            if (TextUtils.isEmpty(fullName) || TextUtils.isEmpty(email) || TextUtils.isEmpty(dateOfBirth)) {
                 Toast.makeText(this, R.string.error_empty_fields, Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -213,6 +232,7 @@ public class ProfileActivity extends BaseActivity {
 
             currentUser.setFullName(fullName);
             currentUser.setEmail(email);
+            currentUser.setDateOfBirth(dateOfBirth);
             currentUser.setRoleName(currentUser.getRoleName());
             currentUser.setBloodType(bloodTypeDropdown.getText().toString());
 

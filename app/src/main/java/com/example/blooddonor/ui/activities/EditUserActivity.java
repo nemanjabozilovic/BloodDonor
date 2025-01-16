@@ -4,6 +4,7 @@ import static com.example.blooddonor.utils.TextInputHelper.addTextWatcher;
 import static com.example.blooddonor.utils.TextInputHelper.clearError;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -30,8 +31,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class EditUserActivity extends BaseActivity {
@@ -39,9 +43,9 @@ public class EditUserActivity extends BaseActivity {
     private RoleUseCase roleUseCase;
     private UserUseCase userUseCase;
 
-    private TextInputEditText fullNameField, emailField;
+    private TextInputEditText fullNameField, emailField, dateOfBirthField;
     private AutoCompleteTextView roleDropdown, bloodTypeDropdown;
-    private TextInputLayout fullNameInputLayout, emailInputLayout, roleInputLayout, bloodTypeInputLayout;
+    private TextInputLayout fullNameInputLayout, emailInputLayout, dateOfBirthInputLayout, roleInputLayout, bloodTypeInputLayout;
     private MaterialButton saveUserButton, change_password_button;
 
     private UserDTO currentUser, selectedUser;
@@ -90,11 +94,13 @@ public class EditUserActivity extends BaseActivity {
     private void initializeUIElements() {
         fullNameField = findViewById(R.id.full_name);
         emailField = findViewById(R.id.email);
+        dateOfBirthField = findViewById(R.id.date_of_birth);
         roleDropdown = findViewById(R.id.user_role_dropdown);
         bloodTypeDropdown = findViewById(R.id.blood_type_dropdown);
 
         fullNameInputLayout = findViewById(R.id.full_name_input_layout);
         emailInputLayout = findViewById(R.id.email_input_layout);
+        dateOfBirthInputLayout = findViewById(R.id.date_of_birth_input_layout);
         roleInputLayout = findViewById(R.id.user_role_input_layout);
         bloodTypeInputLayout = findViewById(R.id.blood_type_input_layout);
         saveUserButton = findViewById(R.id.save_user_button);
@@ -108,6 +114,7 @@ public class EditUserActivity extends BaseActivity {
         if (selectedUser != null) {
             fullNameField.setText(selectedUser.getFullName());
             emailField.setText(selectedUser.getEmail());
+            dateOfBirthField.setText(selectedUser.getDateOfBirth());
             roleDropdown.setText(selectedUser.getRoleName(), false);
             bloodTypeDropdown.setText(selectedUser.getBloodType(), false);
             selectedRole = selectedUser.getRoleName();
@@ -129,8 +136,20 @@ public class EditUserActivity extends BaseActivity {
             clearError(roleInputLayout);
         });
 
+        dateOfBirthField.setOnClickListener(v -> showDatePickerDialog());
+
         addTextWatcher(fullNameField, fullNameInputLayout);
         addTextWatcher(emailField, emailInputLayout);
+        addTextWatcher(dateOfBirthField, dateOfBirthInputLayout);
+    }
+
+    private void showDatePickerDialog() {
+        final Calendar calendar = Calendar.getInstance();
+        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+            calendar.set(year, month, dayOfMonth);
+            String formattedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.getTime());
+            dateOfBirthField.setText(formattedDate);
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     private void populateBloodTypeDropdown() {
@@ -216,17 +235,19 @@ public class EditUserActivity extends BaseActivity {
     }
 
     private void handleSaveUser() {
-        String fullName = fullNameField.getText().toString().trim();
-        String email = emailField.getText().toString().trim();
+        String fullName = Objects.requireNonNull(fullNameField.getText()).toString().trim();
+        String email = Objects.requireNonNull(emailField.getText()).toString().trim();
+        String dateOfBirth = Objects.requireNonNull(dateOfBirthField.getText()).toString().trim();
 
         resetErrors();
 
-        if (!validateInputs(fullName, email)) {
+        if (!validateInputs(fullName, email, dateOfBirth)) {
             return;
         }
 
         selectedUser.setFullName(fullName);
         selectedUser.setEmail(email);
+        selectedUser.setDateOfBirth(dateOfBirth);
         selectedUser.setRoleName(selectedRole);
         selectedUser.setBloodType(selectedBloodType);
 
@@ -246,7 +267,7 @@ public class EditUserActivity extends BaseActivity {
         finish();
     }
 
-    private boolean validateInputs(String fullName, String email) {
+    private boolean validateInputs(String fullName, String email, String dateOfBirth) {
         if (TextUtils.isEmpty(fullName)) {
             fullNameInputLayout.setError(getString(R.string.error_empty_name));
             return false;
@@ -262,12 +283,18 @@ public class EditUserActivity extends BaseActivity {
             return false;
         }
 
+        if (TextUtils.isEmpty(dateOfBirth)) {
+            dateOfBirthInputLayout.setError(getString(R.string.error_empty_date_of_birth));
+            return false;
+        }
+
         return true;
     }
 
     private void resetErrors() {
         clearError(fullNameInputLayout);
         clearError(emailInputLayout);
+        clearError(dateOfBirthInputLayout);
         clearError(roleInputLayout);
         clearError(bloodTypeInputLayout);
     }

@@ -17,6 +17,7 @@ public class UserRepositoryImpl implements UserRepository {
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_FULL_NAME = "full_name";
     private static final String COLUMN_EMAIL = "email";
+    private static final String COLUMN_DATE_OF_BIRTH = "dateOfBirth";
     private static final String COLUMN_PASSWORD = "password";
     private static final String COLUMN_SALT = "salt";
     private static final String COLUMN_BLOOD_TYPE = "blood_type";
@@ -173,6 +174,7 @@ public class UserRepositoryImpl implements UserRepository {
                 cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
                 cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FULL_NAME)),
                 cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL)),
+                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE_OF_BIRTH)),
                 cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PASSWORD)),
                 cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SALT)),
                 cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BLOOD_TYPE)),
@@ -186,6 +188,7 @@ public class UserRepositoryImpl implements UserRepository {
         ContentValues values = new ContentValues();
         values.put(COLUMN_FULL_NAME, user.getFullName());
         values.put(COLUMN_EMAIL, user.getEmail());
+        values.put(COLUMN_DATE_OF_BIRTH, user.getDateOfBirth());
         values.put(COLUMN_PASSWORD, user.getPassword());
         values.put(COLUMN_SALT, user.getSalt());
         values.put(COLUMN_BLOOD_TYPE, user.getBloodType());

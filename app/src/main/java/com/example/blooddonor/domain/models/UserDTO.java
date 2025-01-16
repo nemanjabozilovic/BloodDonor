@@ -7,6 +7,7 @@ public class UserDTO implements Parcelable {
     private int id;
     private String fullName;
     private String email;
+    private String dateOfBirth;
     private String password;
     private String salt;
     private String bloodType;
@@ -17,10 +18,11 @@ public class UserDTO implements Parcelable {
 
     public UserDTO() {}
 
-    public UserDTO(int id, String fullName, String email, String password, String salt, String bloodType, String profilePicture, int roleId, int verificationCode) {
+    public UserDTO(int id, String fullName, String email, String dateOfBirth, String password, String salt, String bloodType, String profilePicture, int roleId, int verificationCode) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
+        this.dateOfBirth = dateOfBirth;
         this.password = password;
         this.salt = salt;
         this.bloodType = bloodType;
@@ -33,6 +35,7 @@ public class UserDTO implements Parcelable {
         id = in.readInt();
         fullName = in.readString();
         email = in.readString();
+        dateOfBirth = in.readString();
         password = in.readString();
         salt = in.readString();
         bloodType = in.readString();
@@ -59,6 +62,7 @@ public class UserDTO implements Parcelable {
         dest.writeInt(id);
         dest.writeString(fullName);
         dest.writeString(email);
+        dest.writeString(dateOfBirth);
         dest.writeString(password);
         dest.writeString(salt);
         dest.writeString(bloodType);
@@ -151,5 +155,13 @@ public class UserDTO implements Parcelable {
 
     public void setVerificationCode(int verificationCode) {
         this.verificationCode = verificationCode;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }

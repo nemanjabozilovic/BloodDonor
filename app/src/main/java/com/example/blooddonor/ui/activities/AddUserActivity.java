@@ -4,6 +4,7 @@ import static com.example.blooddonor.utils.TextInputHelper.addTextWatcher;
 import static com.example.blooddonor.utils.TextInputHelper.clearError;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -28,19 +29,22 @@ import com.example.blooddonor.utils.EmailTemplates;
 import com.example.blooddonor.utils.EmailValidator;
 import com.example.blooddonor.utils.PasswordUtils;
 import com.example.blooddonor.utils.TextInputHelper;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.android.material.button.MaterialButton;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class AddUserActivity extends BaseActivity {
 
-    private TextInputEditText fullNameField, emailField, passwordField;
+    private TextInputEditText fullNameField, emailField, dateOfBirthField, passwordField;
     private AutoCompleteTextView roleDropdown, bloodTypeDropdown;
-    private TextInputLayout fullNameInputLayout, emailInputLayout, passwordInputLayout, roleInputLayout, bloodTypeInputLayout;
+    private TextInputLayout fullNameInputLayout, emailInputLayout, dateOfBirthInputLayout, passwordInputLayout, roleInputLayout, bloodTypeInputLayout;
     private MaterialButton saveUserButton;
 
     private RoleUseCase roleUseCase;
@@ -87,12 +91,14 @@ public class AddUserActivity extends BaseActivity {
     private void initializeUIElements() {
         fullNameField = findViewById(R.id.full_name);
         emailField = findViewById(R.id.email);
+        dateOfBirthField = findViewById(R.id.date_of_birth);
         passwordField = findViewById(R.id.password);
         roleDropdown = findViewById(R.id.user_role_dropdown);
         bloodTypeDropdown = findViewById(R.id.blood_type_dropdown);
 
         fullNameInputLayout = findViewById(R.id.full_name_input_layout);
         emailInputLayout = findViewById(R.id.email_input_layout);
+        dateOfBirthInputLayout = findViewById(R.id.date_of_birth_input_layout);
         passwordInputLayout = findViewById(R.id.password_input_layout);
         roleInputLayout = findViewById(R.id.user_role_input_layout);
         bloodTypeInputLayout = findViewById(R.id.blood_type_input_layout);
@@ -151,24 +157,37 @@ public class AddUserActivity extends BaseActivity {
             clearError(roleInputLayout);
         });
 
+        dateOfBirthField.setOnClickListener(v -> showDatePickerDialog());
+
         addTextWatcher(fullNameField, fullNameInputLayout);
         addTextWatcher(emailField, emailInputLayout);
+        addTextWatcher(dateOfBirthField, dateOfBirthInputLayout);
         addTextWatcher(passwordField, passwordInputLayout);
+    }
+
+    private void showDatePickerDialog() {
+        final Calendar calendar = Calendar.getInstance();
+        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+            calendar.set(year, month, dayOfMonth);
+            String formattedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.getTime());
+            dateOfBirthField.setText(formattedDate);
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     private void handleSaveUser() {
         String fullName = getFieldValue(fullNameField);
         String email = getFieldValue(emailField);
         String password = getFieldValue(passwordField);
+        String dateOfBirth = getFieldValue(dateOfBirthField);
 
         resetErrors();
 
-        if (!validateInputs(fullName, email, password, selectedRole, selectedBloodType)) {
+        if (!validateInputs(fullName, email, dateOfBirth, password, selectedRole, selectedBloodType)) {
             return;
         }
 
         try {
-            UserDTO newUser = createUserDTO(fullName, email, password);
+            UserDTO newUser = createUserDTO(fullName, email, dateOfBirth, password);
             UserDTO createdUser = userUseCase.insertUser(newUser);
 
             if (createdUser != null) {
@@ -212,11 +231,12 @@ public class AddUserActivity extends BaseActivity {
         finish();
     }
 
-    private UserDTO createUserDTO(String fullName, String email, String password) {
+    private UserDTO createUserDTO(String fullName, String email, String dateOfBirth, String password) {
         String salt = PasswordUtils.generateSalt();
         UserDTO userDTO = new UserDTO();
         userDTO.setFullName(fullName);
         userDTO.setEmail(email);
+        userDTO.setDateOfBirth(dateOfBirth);
         userDTO.setSalt(salt);
         userDTO.setPassword(PasswordUtils.hashPassword(password, salt));
         userDTO.setBloodType(selectedBloodType);
@@ -230,12 +250,13 @@ public class AddUserActivity extends BaseActivity {
     private void resetErrors() {
         TextInputHelper.clearError(fullNameInputLayout);
         TextInputHelper.clearError(emailInputLayout);
+        TextInputHelper.clearError(dateOfBirthInputLayout);
         TextInputHelper.clearError(passwordInputLayout);
         TextInputHelper.clearError(roleInputLayout);
         TextInputHelper.clearError(bloodTypeInputLayout);
     }
 
-    private boolean validateInputs(String fullName, String email, String password, String role, String bloodType) {
+    private boolean validateInputs(String fullName, String email, String dateOfBirth, String password, String role, String bloodType) {
         if (TextUtils.isEmpty(fullName)) {
             fullNameInputLayout.setError(getString(R.string.error_empty_name));
             return false;
@@ -248,6 +269,11 @@ public class AddUserActivity extends BaseActivity {
 
         if (!EmailValidator.isValidEmail(email)) {
             emailInputLayout.setError(getString(R.string.error_invalid_email));
+            return false;
+        }
+
+        if (TextUtils.isEmpty(dateOfBirth)) {
+            dateOfBirthInputLayout.setError(getString(R.string.error_empty_date_of_birth));
             return false;
         }
 

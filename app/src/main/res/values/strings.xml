@@ -11,7 +11,7 @@
     <string name="create_account">Create Account</string>
     <string name="register">Register</string>
     <string name="full_name_hint">Full Name</string>
-    <string name="blood_type_hint">Select blood type</string>
+    <string name="blood_type_hint">Select Blood Type</string>
     <string-array name="blood_types">
         <item>O+</item>
         <item>O-</item>
@@ -28,7 +28,7 @@
     <string name="error_empty_password">Please enter your password.</string>
     <string name="error_empty_blood_type">Please select your blood type.</string>
     <string name="error_empty_name">Please enter your full name.</string>
-    <string name="user_role_hint">Select user type</string>
+    <string name="user_role_hint">Select User Type</string>
     <string name="error_empty_role">Please select a role.</string>
     <string name="register_success">Registration successful!</string>
     <string name="register_error">An error occurred during registration.</string>
@@ -157,4 +157,7 @@
     <string name="error_submitting_request">An error occurred while submitting the blood request. Please try again.</string>
     <string name="error_empty_patient_name">Please enter patient name.</string>
     <string name="error_empty_deadline">Please enter blood request deadline.</string>
+    <string name="date_of_birth_hint">Date Of Birth</string>
+    <string name="error_empty_date_of_birth">Date of birth is required.</string>
+    <string name="profile_image_saved">Profile picture is set! Save changes to apply them.</string>
 </resources>

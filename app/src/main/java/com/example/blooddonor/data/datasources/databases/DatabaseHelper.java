@@ -30,6 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_FULL_NAME = "full_name";
     private static final String COLUMN_EMAIL = "email";
     private static final String COLUMN_PASSWORD = "password";
+    private static final String COLUMN_DATE_OF_BIRTH = "dateOfBirth";
     private static final String COLUMN_SALT = "salt";
     private static final String COLUMN_PROFILE_PICTURE = "profile_picture";
     private static final String COLUMN_ROLE_ID = "role_id";
@@ -69,6 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_FULL_NAME + " TEXT NOT NULL, " +
             COLUMN_EMAIL + " TEXT NOT NULL UNIQUE, " +
+            COLUMN_DATE_OF_BIRTH + " TEXT NOT NULL, " +
             COLUMN_PASSWORD + " TEXT NOT NULL, " +
             COLUMN_SALT + " TEXT NOT NULL, " +
             COLUMN_BLOOD_TYPE + " TEXT, " +
@@ -139,10 +141,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO " + TABLE_LOCATION_TYPES + " (" + COLUMN_NAME + ") VALUES ('Hospital'), ('Health Center'), ('Medical Faculty');");
 
         // Admin User
-        String adminFullName = "Admin User";
-        String adminEmail = "admin@blooddonor.com";
+        String adminFullName = "John Doe";
+        String adminEmail = "john.doe@blooddonor.com";
         String adminSalt = PasswordUtils.generateSalt();
-        String adminPasswordHash = PasswordUtils.hashPassword("adminpassword", adminSalt);
+        String adminPasswordHash = PasswordUtils.hashPassword("cGFzc3dvcmQ=", adminSalt);
+        String adminDateOfBirth = "1998-05-23";
 
         db.execSQL("INSERT INTO " + TABLE_USERS + " (" +
                 COLUMN_FULL_NAME + ", " +
@@ -150,13 +153,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_PASSWORD + ", " +
                 COLUMN_SALT + ", " +
                 COLUMN_ROLE_ID + ", " +
-                COLUMN_BLOOD_TYPE + ") " +
+                COLUMN_BLOOD_TYPE + ", " +
+                COLUMN_DATE_OF_BIRTH + ") " +
                 "VALUES ('" + adminFullName + "', '" +
                 adminEmail + "', '" +
                 adminPasswordHash + "', '" +
                 adminSalt + "', " +
                 "(SELECT " + COLUMN_ID + " FROM " + TABLE_ROLES + " WHERE " + COLUMN_ROLE_NAME + " = 'Admin'), " +
-                "'0+');");
+                "'0+', '" + adminDateOfBirth + "');");
+
+        String[][] faqs = {
+                {"Do I always need to fill out the blood donor questionnaire?", "Yes, before each blood donation, it is necessary to complete and sign the blood donor questionnaire."},
+                {"Will my blood be tested?", "Every blood donation is tested for:\n– Blood type determination in the ABO and Rh(D) system, and screening for irregular antibodies\n– Screening for markers of Hepatitis B, Hepatitis C, HIV/AIDS, and Syphilis"},
+                {"Why is hemoglobin level checked before donating blood?", "Before donation, each donor's hemoglobin level is checked. Only individuals who meet the required criteria can donate blood. This prevents iron deficiency in our donors."},
+                {"Which blood type is most needed?", "Yours!"},
+                {"How long does blood donation take?", "The entire procedure, including filling out the questionnaire, medical and hematological examination, and donation, takes about 20 minutes."},
+                {"Do I need to rest the arm from which blood was taken, and for how long?", "The bandage should be worn on the puncture site for at least two hours after donation, and intense use of the arm should be avoided for at least 12 hours."},
+                {"Should I be mindful of what I eat and drink after donation?", "After donating blood, it is advisable to stay hydrated with water or non-alcoholic beverages for the next 24 hours and have regular meals."},
+                {"Should I eat something before donating blood?", "A light carbohydrate meal is recommended."},
+                {"Can I go straight home after donating blood?", "After donating blood, donors can return to their usual activities while avoiding risky behaviors (smoking, excessive physical activity, alcohol consumption) for the next 24 hours."},
+                {"Why is it good to stay hydrated before donating blood?", "To better prepare the body for the temporary loss of a certain amount of fluid."},
+                {"How much blood is taken during donation?", "The standard amount of donated blood is always the same: 450ml."},
+                {"How often can I donate blood?", "Women can donate blood every 16 weeks, while men can donate every 12 weeks."},
+                {"Is my blood type really needed?", "All blood types are equally needed and important."},
+                {"I don't know how many times I have donated blood. Can I check?", "Donation records are always available and easily verifiable in our information system."},
+                {"What about privacy during my visit to the blood donation center?", "All donor data is used exclusively for transfusion service purposes, and any other misuse is strictly prohibited."},
+                {"Does blood donation affect blood pressure?", "Blood donation has a beneficial effect on people with hypertension but may cause temporary blood pressure complications in individuals with very low arterial pressure."},
+                {"Are children or friends allowed to accompany me while I donate blood?", "Of course, if that is your wish."},
+                {"I got a bruise after donating blood. Is that normal?", "Sometimes, due to damage to the blood vessel wall at the puncture site, bruises may appear. It is best to treat them with cold compresses. These bruises are temporary and usually disappear after a few days."},
+                {"What kind of clothing should I wear when donating blood?", "Clothing should be appropriate for the weather conditions, and it is advisable to avoid tight sleeves for easier medical examination and donation."}
+        };
+
+        for (String[] faq : faqs) {
+            db.execSQL("INSERT INTO " + TABLE_FAQ + " (" + COLUMN_QUESTION + ", " + COLUMN_ANSWER + ") VALUES (?, ?);",
+                    new Object[]{faq[0], faq[1]});
+        }
     }
 
     @Override

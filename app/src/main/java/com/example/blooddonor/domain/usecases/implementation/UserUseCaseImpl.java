@@ -106,18 +106,4 @@ public class UserUseCaseImpl implements UserUseCase {
     public boolean updatePassword(String email, String hashedPassword, String salt) {
         return userRepository.updatePassword(email, hashedPassword, salt);
     }
-
-    @Override
-    public String saveProfilePicture(int userId, Context context, Uri imageUri, String existingFilePath) {
-        try {
-            String savedPath = ImageUploadHelper.saveImageToAppStorage(context, imageUri, existingFilePath);
-            boolean isUpdated = userRepository.updateProfilePicture(userId, savedPath);
-            if (!isUpdated) {
-                throw new Exception(String.valueOf(R.string.error_saving_image));
-            }
-            return savedPath;
-        } catch (Exception e) {
-            throw new RuntimeException(e.getLocalizedMessage());
-        }
-    }
 }

@@ -18,5 +18,4 @@ public interface UserUseCase {
     boolean updateVerificationCode(String email, int verificationCode);
     UserDTO getUserByEmail(String email);
     boolean updatePassword(String email, String hashedPassword, String salt);
-    String saveProfilePicture(int userId, Context context, Uri imageUri, String existingFilePath);
 }
