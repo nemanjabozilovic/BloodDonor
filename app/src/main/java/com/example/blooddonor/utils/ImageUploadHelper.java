@@ -30,7 +30,10 @@ public class ImageUploadHelper {
             }
 
             if (existingFilePath != null && !existingFilePath.isEmpty()) {
-                deleteImage(existingFilePath);
+                if (!deleteImage(existingFilePath))
+                {
+                    throw new Exception(String.valueOf(R.string.error_deleting_image));
+                }
             }
 
             bitmap = ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.getContentResolver(), imageUri));

@@ -1,5 +1,6 @@
 package com.example.blooddonor.ui.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,19 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
 
     private List<LocationDTO> locations;
     private final OnLocationClickListener listener;
+    private boolean isSelectionMode = false;
 
     public LocationAdapter(List<LocationDTO> locations, OnLocationClickListener listener) {
         this.locations = locations;
         this.listener = listener;
     }
 
+    public LocationAdapter(List<LocationDTO> locations, OnLocationClickListener listener, boolean isSelectionMode) {
+        this(locations, listener);
+        this.isSelectionMode = isSelectionMode;
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     public void setLocations(List<LocationDTO> locations) {
         this.locations = locations;
         notifyDataSetChanged();
@@ -43,8 +51,17 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         holder.typeTextView.setText(location.getLocationTypeName());
 
         holder.itemView.setOnClickListener(v -> listener.onLocationClick(location));
-        holder.btnEdit.setOnClickListener(v -> listener.onEditClick(location));
-        holder.btnDelete.setOnClickListener(v -> listener.onDeleteClick(location.getId()));
+
+        if (isSelectionMode) {
+            holder.btnEdit.setVisibility(View.GONE);
+            holder.btnDelete.setVisibility(View.GONE);
+        } else {
+            holder.btnEdit.setVisibility(View.VISIBLE);
+            holder.btnDelete.setVisibility(View.VISIBLE);
+
+            holder.btnEdit.setOnClickListener(v -> listener.onEditClick(location));
+            holder.btnDelete.setOnClickListener(v -> listener.onDeleteClick(location.getId()));
+        }
     }
 
     @Override

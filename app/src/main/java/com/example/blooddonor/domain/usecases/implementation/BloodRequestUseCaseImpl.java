@@ -1,6 +1,7 @@
 package com.example.blooddonor.domain.usecases.implementation;
 
 import com.example.blooddonor.data.models.BloodRequest;
+import com.example.blooddonor.data.models.Location;
 import com.example.blooddonor.domain.mappers.BloodRequestMapper;
 import com.example.blooddonor.domain.models.BloodRequestDTO;
 import com.example.blooddonor.domain.repositories.BloodRequestRepository;
@@ -22,16 +23,55 @@ public class BloodRequestUseCaseImpl implements BloodRequestUseCase {
     @Override
     public BloodRequestDTO getBloodRequestById(int requestId) {
         BloodRequest bloodRequest = bloodRequestRepository.getBloodRequestById(requestId);
-        return bloodRequest != null ? BloodRequestMapper.toDTO(bloodRequest) : null;
+        if (bloodRequest == null) {
+            return null;
+        }
+
+        BloodRequestDTO bloodRequestDTO = BloodRequestMapper.toDTO(bloodRequest);
+
+        Location location = locationRepository.getLocationById(bloodRequest.getLocationId());
+        if (location != null) {
+            bloodRequestDTO.setLocationName(location.getName());
+        }
+
+        return bloodRequestDTO;
     }
 
+    @Override
+    public List<BloodRequestDTO> getBloodRequestsByUserId(int userId) {
+        List<BloodRequestDTO> bloodRequestDTOs = new ArrayList<>();
+        List<BloodRequest> bloodRequests = bloodRequestRepository.getBloodRequestsByUserId(userId);
+
+        for (BloodRequest bloodRequest : bloodRequests) {
+            BloodRequestDTO dto = BloodRequestMapper.toDTO(bloodRequest);
+
+            Location location = locationRepository.getLocationById(bloodRequest.getLocationId());
+            if (location != null) {
+                dto.setLocationName(location.getName());
+            }
+
+            bloodRequestDTOs.add(dto);
+        }
+
+        return bloodRequestDTOs;
+    }
+    
     @Override
     public List<BloodRequestDTO> getAllBloodRequests() {
         List<BloodRequestDTO> bloodRequestDTOs = new ArrayList<>();
         List<BloodRequest> bloodRequests = bloodRequestRepository.getAllBloodRequests();
+
         for (BloodRequest bloodRequest : bloodRequests) {
-            bloodRequestDTOs.add(BloodRequestMapper.toDTO(bloodRequest));
+            BloodRequestDTO dto = BloodRequestMapper.toDTO(bloodRequest);
+
+            Location location = locationRepository.getLocationById(bloodRequest.getLocationId());
+            if (location != null) {
+                dto.setLocationName(location.getName());
+            }
+
+            bloodRequestDTOs.add(dto);
         }
+
         return bloodRequestDTOs;
     }
 

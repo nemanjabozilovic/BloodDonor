@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.blooddonor.R;
 import com.example.blooddonor.data.datasources.databases.DatabaseHelper;
 import com.example.blooddonor.data.repositories.BloodRequestRepositoryImpl;
@@ -43,7 +44,18 @@ public class HomeActivity extends BaseActivity {
         initializeDependencies();
         initializeCurrentUser();
         initializeUIElements();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         loadBloodRequests();
+
+        boolean shouldRefresh = getIntent().getBooleanExtra("bloodRequest", false);
+        if (shouldRefresh) {
+            loadBloodRequests();
+            getIntent().removeExtra("bloodRequest");
+        }
     }
 
     private void initializeDependencies() {

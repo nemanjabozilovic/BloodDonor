@@ -8,8 +8,11 @@ import com.example.blooddonor.data.datasources.databases.DatabaseHelper;
 import com.example.blooddonor.data.models.BloodRequest;
 import com.example.blooddonor.domain.repositories.BloodRequestRepository;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class BloodRequestRepositoryImpl implements BloodRequestRepository {
     private static final String TABLE_BLOOD_REQUESTS = "blood_requests";
@@ -42,13 +45,40 @@ public class BloodRequestRepositoryImpl implements BloodRequestRepository {
     }
 
     @Override
-    public List<BloodRequest> getAllBloodRequests() {
+    public List<BloodRequest> getBloodRequestsByUserId(int userId) {
         List<BloodRequest> requests = new ArrayList<>();
         SQLiteDatabase database = dbHelper.getReadableDatabase();
-        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_BLOOD_REQUESTS, null);
+
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + TABLE_BLOOD_REQUESTS + " WHERE " + COLUMN_SUBMITTED_BY + " = ?",
+                new String[]{String.valueOf(userId)}
+        );
+
         while (cursor.moveToNext()) {
             requests.add(mapCursorToBloodRequest(cursor));
         }
+
+        cursor.close();
+        return requests;
+    }
+
+
+    @Override
+    public List<BloodRequest> getAllBloodRequests() {
+        List<BloodRequest> requests = new ArrayList<>();
+        SQLiteDatabase database = dbHelper.getReadableDatabase();
+
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+        Cursor cursor = database.rawQuery(
+                "SELECT * FROM " + TABLE_BLOOD_REQUESTS + " WHERE deadline >= ?",
+                new String[]{currentDate}
+        );
+
+        while (cursor.moveToNext()) {
+            requests.add(mapCursorToBloodRequest(cursor));
+        }
+
         cursor.close();
         return requests;
     }

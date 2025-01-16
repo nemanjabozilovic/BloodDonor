@@ -141,7 +141,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void loadBloodRequests() {
-        bloodRequestAdapter.updateData(bloodRequestUseCase.getAllBloodRequests());
+        bloodRequestAdapter.updateData(bloodRequestUseCase.getBloodRequestsByUserId(currentUser.getId()));
     }
 
     @Override

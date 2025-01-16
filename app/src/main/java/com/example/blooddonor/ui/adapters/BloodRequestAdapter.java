@@ -59,9 +59,10 @@ public class BloodRequestAdapter extends RecyclerView.Adapter<BloodRequestAdapte
 
         public void bind(BloodRequestDTO request) {
             patientName.setText(request.getPatientName());
-            location.setText("Location ID: " + request.getLocationId());
+
+            location.setText(request.getLocationName());
             bloodType.setText(request.getBloodType());
-            deadline.setText("Needed By: " + request.getDeadline());
+            deadline.setText(request.getDeadline());
         }
     }
 }

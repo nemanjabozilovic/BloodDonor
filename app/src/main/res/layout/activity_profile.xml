@@ -75,9 +75,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/user_email"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="24dp"
         android:layout_centerHorizontal="true"
-        android:text="@string/active_blood_requests"
+        android:text="@string/created_blood_requests"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/red" />
