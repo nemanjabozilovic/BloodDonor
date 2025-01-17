@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@android:color/white">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/location_search_input_layout"
@@ -29,7 +29,8 @@
         android:id="@+id/location_type_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_below="@id/location_search_input_layout"
+        android:layout_marginBottom="16dp"
         app:boxBackgroundMode="outline"
         app:boxStrokeColor="@color/red"
         android:hint="@string/sort_by_location_type">
@@ -47,9 +48,44 @@
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <LinearLayout
+        android:id="@+id/no_locations_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/location_type_input_layout"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp"
+        >
+
+        <TextView
+            android:id="@+id/no_locations_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/no_locations_available"
+            android:textSize="16sp"
+            android:textColor="@color/gray_700" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_location_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:backgroundTint="@color/red"
+            app:cornerRadius="4dp"
+            app:rippleColor="@color/lighter_red"
+            android:text="@string/add_location"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/location_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/no_locations_container"
+        android:layout_marginTop="8dp"
         android:scrollbars="vertical" />
-</LinearLayout>
+</RelativeLayout>

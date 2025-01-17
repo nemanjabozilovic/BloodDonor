@@ -6,6 +6,7 @@ import static com.example.blooddonor.utils.TextInputHelper.clearError;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -25,14 +26,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.blooddonor.R;
 import com.example.blooddonor.data.datasources.databases.DatabaseHelper;
 import com.example.blooddonor.data.repositories.BloodRequestRepositoryImpl;
 import com.example.blooddonor.data.repositories.LocationRepositoryImpl;
 import com.example.blooddonor.data.repositories.RoleRepositoryImpl;
 import com.example.blooddonor.data.repositories.UserRepositoryImpl;
+import com.example.blooddonor.domain.models.BloodRequestDTO;
 import com.example.blooddonor.domain.models.UserDTO;
 import com.example.blooddonor.domain.repositories.BloodRequestRepository;
 import com.example.blooddonor.domain.repositories.LocationRepository;
@@ -55,6 +55,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -66,8 +67,10 @@ public class ProfileActivity extends BaseActivity {
     private UserUseCase userUseCase;
 
     private ImageView profileImage;
-    private TextView userName;
-    private TextView userEmail;
+    private TextView userName, userEmail, noBloodRequestsText, bloodRequestTitle;
+    private MaterialButton createBloodRequestButton;
+    private RecyclerView bloodRequestsRecyclerView;
+
 
     private UserDTO currentUser;
 
@@ -112,10 +115,13 @@ public class ProfileActivity extends BaseActivity {
         profileImage = findViewById(R.id.profile_image);
         userName = findViewById(R.id.user_name);
         userEmail = findViewById(R.id.user_email);
-        RecyclerView bloodRequestRecyclerView = findViewById(R.id.blood_requests_recycler_view);
-        bloodRequestRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        bloodRequestsRecyclerView = findViewById(R.id.blood_requests_recycler_view);
+        bloodRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         bloodRequestAdapter = new BloodRequestAdapter(new ArrayList<>());
-        bloodRequestRecyclerView.setAdapter(bloodRequestAdapter);
+        bloodRequestsRecyclerView.setAdapter(bloodRequestAdapter);
+        noBloodRequestsText = findViewById(R.id.no_blood_requests_text);
+        createBloodRequestButton = findViewById(R.id.create_blood_request_button);
+        bloodRequestTitle = findViewById(R.id.blood_request_title);
     }
 
     private void setupImagePickerLauncher() {
@@ -145,7 +151,29 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void loadBloodRequests() {
-        bloodRequestAdapter.updateData(bloodRequestUseCase.getBloodRequestsByUserId(currentUser.getId()));
+        List<BloodRequestDTO> createdBloodRequests = bloodRequestUseCase.getBloodRequestsByUserId(currentUser.getId());
+
+        if (createdBloodRequests != null && !createdBloodRequests.isEmpty()) {
+            bloodRequestTitle.setVisibility(View.VISIBLE);
+            bloodRequestsRecyclerView.setVisibility(View.VISIBLE);
+            noBloodRequestsText.setVisibility(View.GONE);
+            createBloodRequestButton.setVisibility(View.GONE);
+
+            bloodRequestAdapter.updateData(createdBloodRequests);
+        } else {
+            bloodRequestTitle.setVisibility(View.GONE);
+            bloodRequestsRecyclerView.setVisibility(View.GONE);
+            noBloodRequestsText.setVisibility(View.VISIBLE);
+            createBloodRequestButton.setVisibility(View.VISIBLE);
+        }
+
+        createBloodRequestButton.setOnClickListener(v -> openRequestBloodActivity());
+    }
+
+    private void openRequestBloodActivity() {
+        Intent intent = new Intent(this, RequestBloodActivity.class);
+        intent.putExtra("userDTO", currentUser);
+        startActivity(intent);
     }
 
     @Override

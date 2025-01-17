@@ -80,7 +80,34 @@
         android:text="@string/created_blood_requests"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@color/red" />
+        android:textColor="@color/red"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/no_blood_requests_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/user_email"
+        android:layout_marginTop="24dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/no_blood_requests"
+        android:textSize="16sp"
+        android:textColor="@color/gray_700"
+        android:visibility="gone" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/create_blood_request_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/no_blood_requests_text"
+        android:layout_marginTop="12dp"
+        android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/red"
+        app:cornerRadius="4dp"
+        app:rippleColor="@color/lighter_red"
+        android:text="@string/create_blood_request"
+        android:textColor="@android:color/white"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/blood_requests_recycler_view"

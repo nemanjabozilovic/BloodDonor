@@ -160,4 +160,7 @@
     <string name="date_of_birth_hint">Date Of Birth</string>
     <string name="error_empty_date_of_birth">Date of birth is required.</string>
     <string name="profile_image_saved">Profile picture is set! Save changes to apply them.</string>
+    <string name="no_blood_requests">You haven\'t created any blood requests yet.</string>
+    <string name="create_blood_request">Create Blood Request</string>
+    <string name="no_locations_available">No locations available</string>
 </resources>

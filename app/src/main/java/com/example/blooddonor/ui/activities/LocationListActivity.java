@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -32,6 +34,7 @@ import com.example.blooddonor.domain.usecases.interfaces.LocationTypeUseCase;
 import com.example.blooddonor.domain.usecases.interfaces.LocationUseCase;
 import com.example.blooddonor.domain.usecases.interfaces.RoleUseCase;
 import com.example.blooddonor.ui.adapters.LocationAdapter;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
@@ -45,6 +48,8 @@ public class LocationListActivity extends BaseActivity {
     private MaterialAutoCompleteTextView locationTypeDropdown;
     private TextInputEditText searchInput;
     private ActivityResultLauncher<Intent> editLocationLauncher;
+    private RecyclerView recyclerView;
+    private LinearLayout noLocationsContainer;
 
     private LocationUseCase locationUseCase;
     private RoleUseCase roleUseCase;
@@ -78,7 +83,7 @@ public class LocationListActivity extends BaseActivity {
     }
 
     private void initializeUIElements() {
-        RecyclerView recyclerView = findViewById(R.id.location_recycler_view);
+        recyclerView = findViewById(R.id.location_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         locationAdapter = new LocationAdapter(new ArrayList<>(), new LocationAdapter.OnLocationClickListener() {
@@ -102,9 +107,18 @@ public class LocationListActivity extends BaseActivity {
 
         locationTypeDropdown = findViewById(R.id.location_type_dropdown);
         searchInput = findViewById(R.id.search_input);
+        noLocationsContainer = findViewById(R.id.no_locations_container);
+        MaterialButton addLocationButton = findViewById(R.id.add_location_button);
+        addLocationButton.setOnClickListener(v -> openAddLocationActivity());
 
         setupLocationTypeDropdown();
         setupSearchInput();
+    }
+
+    private void openAddLocationActivity() {
+        Intent intent = new Intent(this, AddLocationActivity.class);
+        intent.putExtra("userDTO", currentUser);
+        startActivity(intent);
     }
 
     private void setupLocationTypeDropdown() {
@@ -182,9 +196,19 @@ public class LocationListActivity extends BaseActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void loadLocations() {
         allLocations = locationUseCase.getAllLocations();
-        locationAdapter.setLocations(allLocations);
-        locationAdapter.notifyDataSetChanged();
+
+        if (allLocations.isEmpty()) {
+            noLocationsContainer.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            noLocationsContainer.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+
+            locationAdapter.setLocations(allLocations);
+            locationAdapter.notifyDataSetChanged();
+        }
     }
+
 
     private void showLocationDetails(LocationDTO location) {
         String locationDetails = getString(R.string.location_details,
