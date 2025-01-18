@@ -116,9 +116,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             case R.id.nav_request_blood:
                 navigateToActivity(RequestBloodActivity.class);
                 break;
-            case R.id.nav_notifications:
-                navigateToActivity(NotificationActivity.class);
-                break;
             case R.id.nav_faq:
                 navigateToActivity(FaqActivity.class);
                 break;

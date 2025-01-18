@@ -16,7 +16,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_LOCATIONS = "locations";
     private static final String TABLE_LOCATION_TYPES = "location_types";
     private static final String TABLE_BLOOD_REQUESTS = "blood_requests";
-    private static final String TABLE_NOTIFICATION = "notification";
     private static final String TABLE_FAQ = "faq";
 
     // Common Columns
@@ -51,11 +50,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_POSSIBLE_DONORS = "possible_donors";
     private static final String COLUMN_CREATED_AT = "created_at";
     private static final String COLUMN_DEADLINE = "deadline";
-
-    // Notification Table
-    private static final String COLUMN_TITLE = "title";
-    private static final String COLUMN_TEXT = "text";
-    private static final String COLUMN_CREATED_DATE = "created_date";
 
     // FAQ Table
     private static final String COLUMN_QUESTION = "question";
@@ -105,12 +99,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "FOREIGN KEY (" + COLUMN_SUBMITTED_BY + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_ID + ") ON DELETE CASCADE, " +
             "FOREIGN KEY (" + COLUMN_LOCATION_ID + ") REFERENCES " + TABLE_LOCATIONS + "(" + COLUMN_ID + ") ON DELETE CASCADE);";
 
-    private static final String CREATE_TABLE_NOTIFICATION = "CREATE TABLE " + TABLE_NOTIFICATION + " (" +
-            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COLUMN_TITLE + " TEXT NOT NULL, " +
-            COLUMN_TEXT + " TEXT NOT NULL, " +
-            COLUMN_CREATED_DATE + " TEXT NOT NULL);";
-
     private static final String CREATE_TABLE_FAQ = "CREATE TABLE " + TABLE_FAQ + " (" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_QUESTION + " TEXT NOT NULL, " +
@@ -127,7 +115,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TABLE_LOCATION_TYPES);
         sqLiteDatabase.execSQL(CREATE_TABLE_LOCATIONS);
         sqLiteDatabase.execSQL(CREATE_TABLE_BLOOD_REQUESTS);
-        sqLiteDatabase.execSQL(CREATE_TABLE_NOTIFICATION);
         sqLiteDatabase.execSQL(CREATE_TABLE_FAQ);
 
         seed(sqLiteDatabase);
@@ -136,7 +123,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_FAQ);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTIFICATION);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_BLOOD_REQUESTS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LOCATIONS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_LOCATION_TYPES);

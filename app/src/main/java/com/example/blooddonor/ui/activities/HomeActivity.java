@@ -10,15 +10,21 @@ import com.example.blooddonor.R;
 import com.example.blooddonor.data.datasources.databases.DatabaseHelper;
 import com.example.blooddonor.data.repositories.BloodRequestRepositoryImpl;
 import com.example.blooddonor.data.repositories.LocationRepositoryImpl;
+import com.example.blooddonor.data.repositories.LocationTypeRepositoryImpl;
 import com.example.blooddonor.data.repositories.RoleRepositoryImpl;
+import com.example.blooddonor.data.repositories.UserRepositoryImpl;
 import com.example.blooddonor.domain.models.BloodRequestDTO;
 import com.example.blooddonor.domain.models.UserDTO;
 import com.example.blooddonor.domain.repositories.BloodRequestRepository;
 import com.example.blooddonor.domain.repositories.LocationRepository;
+import com.example.blooddonor.domain.repositories.LocationTypeRepository;
 import com.example.blooddonor.domain.repositories.RoleRepository;
+import com.example.blooddonor.domain.repositories.UserRepository;
 import com.example.blooddonor.domain.usecases.implementation.BloodRequestUseCaseImpl;
+import com.example.blooddonor.domain.usecases.implementation.LocationUseCaseImpl;
 import com.example.blooddonor.domain.usecases.implementation.RoleUseCaseImpl;
 import com.example.blooddonor.domain.usecases.interfaces.BloodRequestUseCase;
+import com.example.blooddonor.domain.usecases.interfaces.LocationUseCase;
 import com.example.blooddonor.domain.usecases.interfaces.RoleUseCase;
 import com.example.blooddonor.ui.adapters.BloodRequestAdapter;
 
@@ -30,6 +36,7 @@ public class HomeActivity extends BaseActivity {
     private BloodRequestAdapter bloodRequestAdapter;
     private BloodRequestUseCase bloodRequestUseCase;
     private RoleUseCase roleUseCase;
+    private LocationUseCase locationUseCase;
 
     private UserDTO currentUser;
 
@@ -62,9 +69,12 @@ public class HomeActivity extends BaseActivity {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         BloodRequestRepository bloodRequestRepository = new BloodRequestRepositoryImpl(dbHelper);
         LocationRepository locationRepository = new LocationRepositoryImpl(dbHelper);
+        LocationTypeRepository locationTypeRepository = new LocationTypeRepositoryImpl(dbHelper);
         RoleRepository roleRepository = new RoleRepositoryImpl(dbHelper);
-        bloodRequestUseCase = new BloodRequestUseCaseImpl(bloodRequestRepository, locationRepository);
+        UserRepository userRepository = new UserRepositoryImpl(dbHelper);
+        bloodRequestUseCase = new BloodRequestUseCaseImpl(bloodRequestRepository, locationRepository, userRepository);
         roleUseCase = new RoleUseCaseImpl(roleRepository);
+        locationUseCase = new LocationUseCaseImpl(locationRepository, locationTypeRepository, bloodRequestRepository);
     }
 
     private void initializeCurrentUser() {
@@ -79,7 +89,7 @@ public class HomeActivity extends BaseActivity {
         RecyclerView bloodRequestRecyclerView = findViewById(R.id.blood_requests_recycler_view);
         bloodRequestRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        bloodRequestAdapter = new BloodRequestAdapter(new ArrayList<>());
+        bloodRequestAdapter = new BloodRequestAdapter(new ArrayList<>(), locationUseCase);
         bloodRequestRecyclerView.setAdapter(bloodRequestAdapter);
     }
 

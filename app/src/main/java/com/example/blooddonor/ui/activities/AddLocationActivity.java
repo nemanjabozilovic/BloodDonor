@@ -17,12 +17,14 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.example.blooddonor.R;
 import com.example.blooddonor.data.datasources.databases.DatabaseHelper;
+import com.example.blooddonor.data.repositories.BloodRequestRepositoryImpl;
 import com.example.blooddonor.data.repositories.LocationRepositoryImpl;
 import com.example.blooddonor.data.repositories.LocationTypeRepositoryImpl;
 import com.example.blooddonor.data.repositories.RoleRepositoryImpl;
 import com.example.blooddonor.domain.models.LocationDTO;
 import com.example.blooddonor.domain.models.LocationTypeDTO;
 import com.example.blooddonor.domain.models.UserDTO;
+import com.example.blooddonor.domain.repositories.BloodRequestRepository;
 import com.example.blooddonor.domain.repositories.LocationRepository;
 import com.example.blooddonor.domain.repositories.LocationTypeRepository;
 import com.example.blooddonor.domain.repositories.RoleRepository;
@@ -79,7 +81,8 @@ public class AddLocationActivity extends BaseActivity {
         LocationRepository locationRepository = new LocationRepositoryImpl(dbHelper);
         LocationTypeRepository locationTypeRepository = new LocationTypeRepositoryImpl(dbHelper);
         RoleRepository roleRepository = new RoleRepositoryImpl(dbHelper);
-        locationUseCase = new LocationUseCaseImpl(locationRepository, locationTypeRepository);
+        BloodRequestRepository bloodRequestRepository = new BloodRequestRepositoryImpl(dbHelper);
+        locationUseCase = new LocationUseCaseImpl(locationRepository, locationTypeRepository, bloodRequestRepository);
         locationTypeUseCase = new LocationTypeUseCaseImpl(locationTypeRepository);
         roleUseCase = new RoleUseCaseImpl(roleRepository);
     }
@@ -229,8 +232,8 @@ public class AddLocationActivity extends BaseActivity {
             location.setName(locationName);
             location.setPhoneNumbers(phoneNumbers);
             location.setLocation(cityCountry);
-            location.setLongitude(Double.parseDouble(latitude));
-            location.setLatitude(Double.parseDouble(longitude));
+            location.setLongitude(Double.parseDouble(longitude));
+            location.setLatitude(Double.parseDouble(latitude));
             location.setLocationTypeId(getLocationTypeId(selectedLocationType));
 
             if (locationUseCase.insertLocation(location) != null) {

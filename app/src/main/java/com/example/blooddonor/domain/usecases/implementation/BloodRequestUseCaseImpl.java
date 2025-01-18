@@ -2,10 +2,12 @@ package com.example.blooddonor.domain.usecases.implementation;
 
 import com.example.blooddonor.data.models.BloodRequest;
 import com.example.blooddonor.data.models.Location;
+import com.example.blooddonor.data.models.User;
 import com.example.blooddonor.domain.mappers.BloodRequestMapper;
 import com.example.blooddonor.domain.models.BloodRequestDTO;
 import com.example.blooddonor.domain.repositories.BloodRequestRepository;
 import com.example.blooddonor.domain.repositories.LocationRepository;
+import com.example.blooddonor.domain.repositories.UserRepository;
 import com.example.blooddonor.domain.usecases.interfaces.BloodRequestUseCase;
 
 import java.util.ArrayList;
@@ -14,10 +16,12 @@ import java.util.List;
 public class BloodRequestUseCaseImpl implements BloodRequestUseCase {
     private final BloodRequestRepository bloodRequestRepository;
     private final LocationRepository locationRepository;
+    private final UserRepository userRepository;
 
-    public BloodRequestUseCaseImpl(BloodRequestRepository bloodRequestRepository, LocationRepository locationRepository) {
+    public BloodRequestUseCaseImpl(BloodRequestRepository bloodRequestRepository, LocationRepository locationRepository, UserRepository userRepository) {
         this.bloodRequestRepository = bloodRequestRepository;
         this.locationRepository = locationRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -34,6 +38,11 @@ public class BloodRequestUseCaseImpl implements BloodRequestUseCase {
             bloodRequestDTO.setLocationName(location.getName());
         }
 
+        User user = userRepository.getUserById(bloodRequest.getSubmittedBy());
+        if (user != null) {
+            bloodRequestDTO.setSubmittedByName(user.getFullName());
+        }
+
         return bloodRequestDTO;
     }
 
@@ -48,6 +57,11 @@ public class BloodRequestUseCaseImpl implements BloodRequestUseCase {
             Location location = locationRepository.getLocationById(bloodRequest.getLocationId());
             if (location != null) {
                 dto.setLocationName(location.getName());
+            }
+
+            User user = userRepository.getUserById(bloodRequest.getSubmittedBy());
+            if (user != null) {
+                dto.setSubmittedByName(user.getFullName());
             }
 
             bloodRequestDTOs.add(dto);
@@ -67,6 +81,11 @@ public class BloodRequestUseCaseImpl implements BloodRequestUseCase {
             Location location = locationRepository.getLocationById(bloodRequest.getLocationId());
             if (location != null) {
                 dto.setLocationName(location.getName());
+            }
+
+            User user = userRepository.getUserById(bloodRequest.getSubmittedBy());
+            if (user != null) {
+                dto.setSubmittedByName(user.getFullName());
             }
 
             bloodRequestDTOs.add(dto);

@@ -13,6 +13,7 @@ public class BloodRequestDTO implements Parcelable {
     private String createdAt;
     private String deadline;
     private String locationName;
+    private String submittedByName;
 
     public BloodRequestDTO() {}
 
@@ -37,6 +38,7 @@ public class BloodRequestDTO implements Parcelable {
         createdAt = in.readString();
         deadline = in.readString();
         locationName = in.readString();
+        submittedByName = in.readString();
     }
 
     public static final Creator<BloodRequestDTO> CREATOR = new Creator<BloodRequestDTO>() {
@@ -62,6 +64,7 @@ public class BloodRequestDTO implements Parcelable {
         dest.writeString(createdAt);
         dest.writeString(deadline);
         dest.writeString(locationName);
+        dest.writeString(submittedByName);
     }
 
     @Override
@@ -139,5 +142,13 @@ public class BloodRequestDTO implements Parcelable {
 
     public void setLocationName(String locationName) {
         this.locationName = locationName;
+    }
+
+    public String getSubmittedByName() {
+        return submittedByName;
+    }
+
+    public void setSubmittedByName(String submittedByName) {
+        this.submittedByName = submittedByName;
     }
 }

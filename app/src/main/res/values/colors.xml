@@ -33,5 +33,6 @@
     <color name="light_blue">#FFB3E5FC</color>
     <color name="dark_blue">#FF0D47A1</color>
     <color name="soft_red">#FFF28B82</color>
-    <color name="selected_location_background">#40B0F3</color>
+    <color name="green">#34a853</color>
+    <color name="transparent">#00000000</color>
 </resources>

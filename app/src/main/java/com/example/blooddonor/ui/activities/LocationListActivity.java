@@ -18,12 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.blooddonor.R;
 import com.example.blooddonor.data.datasources.databases.DatabaseHelper;
+import com.example.blooddonor.data.repositories.BloodRequestRepositoryImpl;
 import com.example.blooddonor.data.repositories.RoleRepositoryImpl;
 import com.example.blooddonor.domain.models.LocationDTO;
 import com.example.blooddonor.data.repositories.LocationRepositoryImpl;
 import com.example.blooddonor.data.repositories.LocationTypeRepositoryImpl;
 import com.example.blooddonor.domain.models.LocationTypeDTO;
 import com.example.blooddonor.domain.models.UserDTO;
+import com.example.blooddonor.domain.repositories.BloodRequestRepository;
 import com.example.blooddonor.domain.repositories.LocationRepository;
 import com.example.blooddonor.domain.repositories.LocationTypeRepository;
 import com.example.blooddonor.domain.repositories.RoleRepository;
@@ -77,7 +79,8 @@ public class LocationListActivity extends BaseActivity {
         LocationRepository locationRepository = new LocationRepositoryImpl(dbHelper);
         LocationTypeRepository locationTypeRepository = new LocationTypeRepositoryImpl(dbHelper);
         RoleRepository roleRepository = new RoleRepositoryImpl(dbHelper);
-        locationUseCase = new LocationUseCaseImpl(locationRepository, locationTypeRepository);
+        BloodRequestRepository bloodRequestRepository = new BloodRequestRepositoryImpl(dbHelper);
+        locationUseCase = new LocationUseCaseImpl(locationRepository, locationTypeRepository, bloodRequestRepository);
         roleUseCase = new RoleUseCaseImpl(roleRepository);
         locationTypeUseCase = new LocationTypeUseCaseImpl(locationTypeRepository);
     }

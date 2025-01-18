@@ -35,10 +35,6 @@
             android:icon="@drawable/ic_blood_request"
             android:title="@string/request_blood" />
         <item
-            android:id="@+id/nav_notifications"
-            android:icon="@drawable/ic_notifications"
-            android:title="@string/notifications" />
-        <item
             android:id="@+id/nav_faq"
             android:icon="@drawable/ic_question"
             android:title="@string/faq"

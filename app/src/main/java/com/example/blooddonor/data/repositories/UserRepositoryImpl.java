@@ -10,7 +10,9 @@ import com.example.blooddonor.domain.repositories.UserRepository;
 import com.example.blooddonor.utils.PasswordUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserRepositoryImpl implements UserRepository {
     private static final String TABLE_USERS = "users";
@@ -160,13 +162,22 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean updateProfilePicture(int userId, String profilePicturePath) {
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_PROFILE_PICTURE, profilePicturePath);
+    public Map<String, String> getAllUserEmails() {
+        Map<String, String> userMap = new HashMap<>();
+        SQLiteDatabase database = dbHelper.getReadableDatabase();
+        Cursor cursor = database.rawQuery("SELECT " + COLUMN_FULL_NAME + ", " + COLUMN_EMAIL + " FROM " + TABLE_USERS, null);
 
-        int rowsAffected = database.update(TABLE_USERS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(userId)});
-        return rowsAffected > 0;
+        while (cursor.moveToNext()) {
+            String fullName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FULL_NAME));
+            String email = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_EMAIL));
+
+            if (fullName != null && !fullName.isEmpty() && email != null && !email.isEmpty()) {
+                userMap.put(fullName, email);
+            }
+        }
+
+        cursor.close();
+        return userMap;
     }
 
     private User mapCursorToUser(Cursor cursor) {

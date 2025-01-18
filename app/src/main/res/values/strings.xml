@@ -160,7 +160,18 @@
     <string name="date_of_birth_hint">Date Of Birth</string>
     <string name="error_empty_date_of_birth">Date of birth is required.</string>
     <string name="profile_image_saved">Profile picture is set! Save changes to apply them.</string>
-    <string name="no_blood_requests">You haven\'t created any blood requests yet.</string>
+    <string name="no_blood_requests">You haven\'t created any blood requests yet</string>
     <string name="create_blood_request">Create Blood Request</string>
     <string name="no_locations_available">No locations available</string>
+    <string name="blood_request_details">Blood Request Details</string>
+    <string name="submitted_by">Submitted By</string>
+    <string name="get_directions">Get Directions</string>
+    <string name="share">Share</string>
+    <string name="contact">Contact</string>
+    <string name="submitted_by_format">%1$s on %2$s</string>
+    <string name="location_format">%1$s - %2$s</string>
+    <string name="maps_app_not_found">Google Maps app is not installed on your device.</string>
+    <string name="error_location_not_found">Location coordinates are missing. Unable to start navigation.</string>
+    <string name="share_via">Share via</string>
+    <string name="select_phone_number">Select Phone Number</string>
 </resources>

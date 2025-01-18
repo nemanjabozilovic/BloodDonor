@@ -15,6 +15,7 @@ import com.example.blooddonor.utils.UserAlreadyExistsException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class UserUseCaseImpl implements UserUseCase {
     private final UserRepository userRepository;
@@ -23,17 +24,6 @@ public class UserUseCaseImpl implements UserUseCase {
     public UserUseCaseImpl(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-    }
-
-    @Override
-    public UserDTO getUserById(int userId) {
-        User user = userRepository.getUserById(userId);
-        if (user != null) {
-            UserDTO userDTO = UserMapper.toDTO(user);
-            userDTO.setRoleName(roleRepository.getRoleById(user.getRoleId()).getRoleName());
-            return userDTO;
-        }
-        return null;
     }
 
     @Override
@@ -56,11 +46,6 @@ public class UserUseCaseImpl implements UserUseCase {
 
         User user = UserMapper.toModel(userDTO);
         return UserMapper.toDTO(userRepository.insertUser(user));
-    }
-
-    @Override
-    public boolean userExists(String email) {
-        return userRepository.userExists(email);
     }
 
     @Override
@@ -105,5 +90,10 @@ public class UserUseCaseImpl implements UserUseCase {
     @Override
     public boolean updatePassword(String email, String hashedPassword, String salt) {
         return userRepository.updatePassword(email, hashedPassword, salt);
+    }
+
+    @Override
+    public Map<String, String> getAllUserEmails() {
+        return  userRepository.getAllUserEmails();
     }
 }

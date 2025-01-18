@@ -26,6 +26,7 @@ import com.example.blooddonor.data.repositories.BloodRequestRepositoryImpl;
 import com.example.blooddonor.data.repositories.LocationRepositoryImpl;
 import com.example.blooddonor.data.repositories.LocationTypeRepositoryImpl;
 import com.example.blooddonor.data.repositories.RoleRepositoryImpl;
+import com.example.blooddonor.data.repositories.UserRepositoryImpl;
 import com.example.blooddonor.domain.models.BloodRequestDTO;
 import com.example.blooddonor.domain.models.LocationDTO;
 import com.example.blooddonor.domain.models.LocationTypeDTO;
@@ -34,26 +35,34 @@ import com.example.blooddonor.domain.repositories.BloodRequestRepository;
 import com.example.blooddonor.domain.repositories.LocationRepository;
 import com.example.blooddonor.domain.repositories.LocationTypeRepository;
 import com.example.blooddonor.domain.repositories.RoleRepository;
+import com.example.blooddonor.domain.repositories.UserRepository;
 import com.example.blooddonor.domain.usecases.implementation.BloodRequestUseCaseImpl;
 import com.example.blooddonor.domain.usecases.implementation.LocationTypeUseCaseImpl;
 import com.example.blooddonor.domain.usecases.implementation.LocationUseCaseImpl;
 import com.example.blooddonor.domain.usecases.implementation.RoleUseCaseImpl;
+import com.example.blooddonor.domain.usecases.implementation.UserUseCaseImpl;
 import com.example.blooddonor.domain.usecases.interfaces.BloodRequestUseCase;
 import com.example.blooddonor.domain.usecases.interfaces.LocationTypeUseCase;
 import com.example.blooddonor.domain.usecases.interfaces.LocationUseCase;
 import com.example.blooddonor.domain.usecases.interfaces.RoleUseCase;
+import com.example.blooddonor.domain.usecases.interfaces.UserUseCase;
 import com.example.blooddonor.ui.adapters.LocationAdapter;
 import com.example.blooddonor.utils.BloodRequestHelper;
+import com.example.blooddonor.utils.EmailSender;
+import com.example.blooddonor.utils.EmailTemplates;
 import com.example.blooddonor.utils.TextInputHelper;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class RequestBloodActivity extends BaseActivity {
@@ -67,6 +76,8 @@ public class RequestBloodActivity extends BaseActivity {
     private LocationUseCase locationUseCase;
     private LocationTypeUseCase locationTypeUseCase;
     private RoleUseCase roleUseCase;
+    private UserUseCase userUseCase;
+    private EmailSender emailSender;
 
     private LocationDTO selectedLocation;
     private List<LocationDTO> allLocations;
@@ -94,13 +105,16 @@ public class RequestBloodActivity extends BaseActivity {
         LocationRepository locationRepository = new LocationRepositoryImpl(dbHelper);
         LocationTypeRepository locationTypeRepository = new LocationTypeRepositoryImpl(dbHelper);
         RoleRepository roleRepository = new RoleRepositoryImpl(dbHelper);
+        UserRepository userRepository = new UserRepositoryImpl(dbHelper);
 
-        bloodRequestUseCase = new BloodRequestUseCaseImpl(bloodRequestRepository, locationRepository);
-        locationUseCase = new LocationUseCaseImpl(locationRepository, locationTypeRepository);
+        bloodRequestUseCase = new BloodRequestUseCaseImpl(bloodRequestRepository, locationRepository, userRepository);
+        locationUseCase = new LocationUseCaseImpl(locationRepository, locationTypeRepository, bloodRequestRepository);
         locationTypeUseCase = new LocationTypeUseCaseImpl(locationTypeRepository);
         roleUseCase = new RoleUseCaseImpl(roleRepository);
+        userUseCase = new UserUseCaseImpl(userRepository, roleRepository);
 
         allLocations = locationUseCase.getAllLocations();
+        emailSender = new EmailSender("office@blooddonor.com");
     }
 
     private void initializeUI() {
@@ -289,14 +303,69 @@ public class RequestBloodActivity extends BaseActivity {
         bloodRequest.setLocationName(locationName);
         bloodRequest.setBloodType(bloodType);
         bloodRequest.setDeadline(deadline);
-        bloodRequest.setPossibleDonors(Objects.requireNonNull(possibleDonorsField.getText()).toString());
+        bloodRequest.setCreatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        String possibleDonors = Objects.requireNonNull(possibleDonorsField.getText()).toString();
+        bloodRequest.setPossibleDonors(possibleDonors);
         bloodRequest.setSubmittedBy(currentUser.getId());
 
         if (bloodRequestUseCase.insertBloodRequest(bloodRequest) != null) {
             Toast.makeText(this, R.string.request_submitted_successfully, Toast.LENGTH_SHORT).show();
+            sendBloodRequestCreatedEmail(
+                    selectedLocation.getName(),
+                    selectedLocation.getPhoneNumbers(),
+                    selectedLocation.getLocation(),
+                    patientName,
+                    bloodType,
+                    possibleDonors,
+                    deadline);
             openHomeActivity();
         } else {
             Toast.makeText(this, R.string.error_submitting_request, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void sendBloodRequestCreatedEmail(
+            String locationName,
+            String phoneNumbers,
+            String location,
+            String patientName,
+            String patientBloodType,
+            String possibleDonors,
+            String deadline
+    ) {
+        Map<String, String> allUserEmails = userUseCase.getAllUserEmails();
+
+        for (Map.Entry<String, String> entry : allUserEmails.entrySet()) {
+            String userName = entry.getKey();
+            String userEmail = entry.getValue();
+
+            String subject = EmailTemplates.getBloodRequestSubject();
+            String body = EmailTemplates.getBloodRequestCreatedTemplate(
+                    userName,
+                    locationName,
+                    phoneNumbers,
+                    location,
+                    patientName,
+                    patientBloodType,
+                    possibleDonors,
+                    deadline);
+
+            emailSender.sendEmail(
+                    userEmail,
+                    subject,
+                    body,
+                    new EmailSender.EmailSendCallback() {
+                        @Override
+                        public void onSuccess() {
+                            System.out.println("Email sent successfully to: " + userEmail);
+                        }
+
+                        @Override
+                        public void onFailure(String errorMessage) {
+                            System.err.println("Failed to send email to: " + userEmail + " - Error: " + errorMessage);
+                        }
+                    }
+            );
         }
     }
 

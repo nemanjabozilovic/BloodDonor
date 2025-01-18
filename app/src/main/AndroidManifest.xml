@@ -87,10 +87,6 @@
             android:theme="@style/Theme.BloodDonor">
         </activity>
         <activity
-            android:name=".ui.activities.NotificationActivity"
-            android:theme="@style/Theme.BloodDonor">
-        </activity>
-        <activity
             android:name=".ui.activities.ProfileActivity"
             android:theme="@style/Theme.BloodDonor">
         </activity>

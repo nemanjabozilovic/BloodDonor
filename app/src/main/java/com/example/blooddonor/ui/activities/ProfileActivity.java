@@ -30,18 +30,22 @@ import com.example.blooddonor.R;
 import com.example.blooddonor.data.datasources.databases.DatabaseHelper;
 import com.example.blooddonor.data.repositories.BloodRequestRepositoryImpl;
 import com.example.blooddonor.data.repositories.LocationRepositoryImpl;
+import com.example.blooddonor.data.repositories.LocationTypeRepositoryImpl;
 import com.example.blooddonor.data.repositories.RoleRepositoryImpl;
 import com.example.blooddonor.data.repositories.UserRepositoryImpl;
 import com.example.blooddonor.domain.models.BloodRequestDTO;
 import com.example.blooddonor.domain.models.UserDTO;
 import com.example.blooddonor.domain.repositories.BloodRequestRepository;
 import com.example.blooddonor.domain.repositories.LocationRepository;
+import com.example.blooddonor.domain.repositories.LocationTypeRepository;
 import com.example.blooddonor.domain.repositories.RoleRepository;
 import com.example.blooddonor.domain.repositories.UserRepository;
 import com.example.blooddonor.domain.usecases.implementation.BloodRequestUseCaseImpl;
+import com.example.blooddonor.domain.usecases.implementation.LocationUseCaseImpl;
 import com.example.blooddonor.domain.usecases.implementation.RoleUseCaseImpl;
 import com.example.blooddonor.domain.usecases.implementation.UserUseCaseImpl;
 import com.example.blooddonor.domain.usecases.interfaces.BloodRequestUseCase;
+import com.example.blooddonor.domain.usecases.interfaces.LocationUseCase;
 import com.example.blooddonor.domain.usecases.interfaces.RoleUseCase;
 import com.example.blooddonor.domain.usecases.interfaces.UserUseCase;
 import com.example.blooddonor.ui.adapters.BloodRequestAdapter;
@@ -65,6 +69,7 @@ public class ProfileActivity extends BaseActivity {
     private BloodRequestUseCase bloodRequestUseCase;
     private RoleUseCase roleUseCase;
     private UserUseCase userUseCase;
+    private LocationUseCase locationUseCase;
 
     private ImageView profileImage;
     private TextView userName, userEmail, noBloodRequestsText, bloodRequestTitle;
@@ -97,9 +102,11 @@ public class ProfileActivity extends BaseActivity {
         BloodRequestRepository bloodRequestRepository = new BloodRequestRepositoryImpl(dbHelper);
         RoleRepository roleRepository = new RoleRepositoryImpl(dbHelper);
         LocationRepository locationRepository = new LocationRepositoryImpl(dbHelper);
-        bloodRequestUseCase = new BloodRequestUseCaseImpl(bloodRequestRepository, locationRepository);
+        LocationTypeRepository locationTypeRepository = new LocationTypeRepositoryImpl(dbHelper);
+        bloodRequestUseCase = new BloodRequestUseCaseImpl(bloodRequestRepository, locationRepository, userRepository);
         roleUseCase = new RoleUseCaseImpl(roleRepository);
         userUseCase = new UserUseCaseImpl(userRepository, roleRepository);
+        locationUseCase = new LocationUseCaseImpl(locationRepository, locationTypeRepository, bloodRequestRepository);
     }
 
     private void initializeCurrentUser() {
@@ -117,7 +124,7 @@ public class ProfileActivity extends BaseActivity {
         userEmail = findViewById(R.id.user_email);
         bloodRequestsRecyclerView = findViewById(R.id.blood_requests_recycler_view);
         bloodRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        bloodRequestAdapter = new BloodRequestAdapter(new ArrayList<>());
+        bloodRequestAdapter = new BloodRequestAdapter(new ArrayList<>(), locationUseCase);
         bloodRequestsRecyclerView.setAdapter(bloodRequestAdapter);
         noBloodRequestsText = findViewById(R.id.no_blood_requests_text);
         createBloodRequestButton = findViewById(R.id.create_blood_request_button);

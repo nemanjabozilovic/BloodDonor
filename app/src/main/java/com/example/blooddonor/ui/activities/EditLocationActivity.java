@@ -17,10 +17,12 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.example.blooddonor.R;
 import com.example.blooddonor.data.datasources.databases.DatabaseHelper;
+import com.example.blooddonor.data.repositories.BloodRequestRepositoryImpl;
 import com.example.blooddonor.data.repositories.LocationRepositoryImpl;
 import com.example.blooddonor.data.repositories.LocationTypeRepositoryImpl;
 import com.example.blooddonor.domain.models.LocationDTO;
 import com.example.blooddonor.domain.models.LocationTypeDTO;
+import com.example.blooddonor.domain.repositories.BloodRequestRepository;
 import com.example.blooddonor.domain.repositories.LocationRepository;
 import com.example.blooddonor.domain.repositories.LocationTypeRepository;
 import com.example.blooddonor.domain.usecases.implementation.LocationTypeUseCaseImpl;
@@ -70,7 +72,8 @@ public class EditLocationActivity extends BaseActivity {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         LocationRepository locationRepository = new LocationRepositoryImpl(dbHelper);
         LocationTypeRepository locationTypeRepository = new LocationTypeRepositoryImpl(dbHelper);
-        locationUseCase = new LocationUseCaseImpl(locationRepository, locationTypeRepository);
+        BloodRequestRepository bloodRequestRepository = new BloodRequestRepositoryImpl(dbHelper);
+        locationUseCase = new LocationUseCaseImpl(locationRepository, locationTypeRepository, bloodRequestRepository);
         locationTypeUseCase = new LocationTypeUseCaseImpl(locationTypeRepository);
     }
 
