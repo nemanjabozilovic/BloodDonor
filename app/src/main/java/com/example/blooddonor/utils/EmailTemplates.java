@@ -45,6 +45,38 @@ public class EmailTemplates {
                 "Blood Donor Team 🩸";
     }
 
+    public static String getShareMessageTemplate(
+            String patientName,
+            String bloodType,
+            String locationName,
+            String locationAddress,
+            String contact,
+            String possibleDonors,
+            String deadline
+    ) {
+        return String.format(
+                "📢 Blood Donation Request 🩸\n\n" +
+                        "Dear Blood Donors,\n\n" +
+                        "A new blood donation request has been created. Your help can save a life!\n\n" +
+                        "🔹 Patient Name: %1$s\n" +
+                        "🩸 Required Blood Type: %2$s\n\n" +
+                        "🏥 Location: %3$s - %4$s\n" +
+                        "📞 Contact: %5$s\n\n" +
+                        "🩸 Compatible Donors: %6$s\n" +
+                        "⏳ Deadline: %7$s\n\n" +
+                        "If you are eligible and willing to donate, please reach out as soon as possible.\n\n" +
+                        "Your generosity can make a real difference. Thank you for your life-saving contribution! ❤️\n\n" +
+                        "Blood Donor Team 🩸",
+                patientName,
+                bloodType,
+                locationName,
+                locationAddress,
+                contact,
+                possibleDonors,
+                (deadline != null && !deadline.isEmpty()) ? deadline : "ASAP"
+        );
+    }
+
     public static String getBloodRequestDeadlineTemplate(
             String userName,
             String patientName,
