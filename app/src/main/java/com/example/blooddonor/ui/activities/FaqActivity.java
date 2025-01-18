@@ -1,8 +1,10 @@
 package com.example.blooddonor.ui.activities;
 
 import android.os.Bundle;
-import androidx.recyclerview.widget.RecyclerView;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.blooddonor.R;
 import com.example.blooddonor.data.datasources.databases.DatabaseHelper;
 import com.example.blooddonor.data.repositories.FaqRepositoryImpl;

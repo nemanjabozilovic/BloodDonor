@@ -5,6 +5,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -27,11 +28,6 @@ public class EmailSender {
         this.senderEmail = senderEmail;
         this.executor = Executors.newSingleThreadExecutor();
         this.handler = new Handler(Looper.getMainLooper());
-    }
-
-    public interface EmailSendCallback {
-        void onSuccess();
-        void onFailure(String errorMessage);
     }
 
     public void sendEmail(String recipientEmail, String subject, String body, EmailSendCallback callback) {
@@ -92,7 +88,7 @@ public class EmailSender {
                         return null;
                     }
                 })
-                .filter(address -> address != null)
+                .filter(Objects::nonNull)
                 .toArray(InternetAddress[]::new);
 
         message.setRecipients(Message.RecipientType.TO, recipientAddresses);
@@ -106,5 +102,11 @@ public class EmailSender {
         Log.e(TAG, "Failed to send email.", e);
         Log.e(TAG, "Recipients: " + recipientEmails);
         Log.e(TAG, "Subject: " + subject);
+    }
+
+    public interface EmailSendCallback {
+        void onSuccess();
+
+        void onFailure(String errorMessage);
     }
 }

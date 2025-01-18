@@ -86,7 +86,7 @@ public class UserRepositoryImpl implements UserRepository {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
 
         int rowsAffected = database.update(TABLE_USERS, mapUserToContentValues(user), COLUMN_ID + " = ?", new String[]{String.valueOf(user.getId())});
-        if (rowsAffected <= 0) return  null;
+        if (rowsAffected <= 0) return null;
 
         return getUserById(user.getId());
     }

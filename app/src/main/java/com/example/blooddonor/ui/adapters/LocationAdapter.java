@@ -17,8 +17,8 @@ import java.util.List;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.LocationViewHolder> {
 
-    private List<LocationDTO> locations;
     private final OnLocationClickListener listener;
+    private List<LocationDTO> locations;
     private boolean isSelectionMode = false;
 
     public LocationAdapter(List<LocationDTO> locations, OnLocationClickListener listener) {
@@ -71,7 +71,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
 
     public interface OnLocationClickListener {
         void onLocationClick(LocationDTO location);
+
         void onEditClick(LocationDTO location);
+
         void onDeleteClick(int locationId);
     }
 

@@ -69,7 +69,7 @@ public class BloodRequestUseCaseImpl implements BloodRequestUseCase {
 
         return bloodRequestDTOs;
     }
-    
+
     @Override
     public List<BloodRequestDTO> getAllBloodRequests() {
         List<BloodRequestDTO> bloodRequestDTOs = new ArrayList<>();

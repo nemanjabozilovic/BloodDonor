@@ -45,6 +45,38 @@ public class EmailTemplates {
                 "Blood Donor Team 🩸";
     }
 
+    public static String getBloodRequestDeadlineTemplate(
+            String userName,
+            String patientName,
+            String patientBloodType,
+            String locationName,
+            String phoneNumbers,
+            String deadline
+    ) {
+        return "Dear " + userName + ",\n\n" +
+                "⏳ Blood Donation Reminder!\n\n" +
+                "The deadline for the following blood donation request is approaching in less than 24 hours:\n\n" +
+                "🔹 Patient Name: " + patientName + "\n" +
+                "🩸 Required Blood Type: " + patientBloodType + "\n\n" +
+                "🏥 Location: " + locationName + "\n" +
+                "📞 Contact: " + phoneNumbers + "\n" +
+                "⏳ Deadline: " + (deadline != null && !deadline.isEmpty() ? deadline : "ASAP") + "\n\n" +
+                "If you are eligible and willing to donate, please consider helping. Your contribution could save a life!\n\n" +
+                "Thank you for your generosity and support.\n\n" +
+                "Best regards,\n" +
+                "Blood Donor Team 🩸";
+    }
+
+    public static String getBirthdayTemplate(String userName) {
+        return "Dear " + userName + ",\n\n" +
+                "🎂 Happy Birthday! 🎉\n\n" +
+                "On this special day, we want to take a moment to celebrate you and wish you a day filled with joy, happiness, and love.\n\n" +
+                "Thank you for being a valuable part of the Blood Donor community. Your generosity and willingness to help others truly make a difference in the world.\n\n" +
+                "We hope you have a fantastic birthday! 🥳🎁\n\n" +
+                "Best wishes,\n" +
+                "Blood Donor Team 🩸";
+    }
+
     public static String getVerificationSubject() {
         return "Password Reset Verification Code";
     }
@@ -54,6 +86,14 @@ public class EmailTemplates {
     }
 
     public static String getBloodRequestSubject() {
-        return "📢: New Blood Request Created";
+        return "📢 New Blood Request Created";
+    }
+
+    public static String getBloodRequestDeadlineSubject() {
+        return "⏳ Urgent: Blood Donation Deadline Approaching";
+    }
+
+    public static String getBirthdaySubject() {
+        return "🎉 Happy Birthday from Blood Donor Team!";
     }
 }

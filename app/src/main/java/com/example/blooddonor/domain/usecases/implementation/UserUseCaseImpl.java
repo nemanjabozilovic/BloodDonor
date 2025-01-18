@@ -1,16 +1,11 @@
 package com.example.blooddonor.domain.usecases.implementation;
 
-import android.content.Context;
-import android.net.Uri;
-
-import com.example.blooddonor.R;
 import com.example.blooddonor.data.models.User;
 import com.example.blooddonor.domain.mappers.UserMapper;
 import com.example.blooddonor.domain.models.UserDTO;
 import com.example.blooddonor.domain.repositories.RoleRepository;
 import com.example.blooddonor.domain.repositories.UserRepository;
 import com.example.blooddonor.domain.usecases.interfaces.UserUseCase;
-import com.example.blooddonor.utils.ImageUploadHelper;
 import com.example.blooddonor.utils.UserAlreadyExistsException;
 
 import java.util.ArrayList;
@@ -72,7 +67,7 @@ public class UserUseCaseImpl implements UserUseCase {
     }
 
     @Override
-    public boolean updateVerificationCode(String email, int verificationCode){
+    public boolean updateVerificationCode(String email, int verificationCode) {
         return userRepository.updateVerificationCode(email, verificationCode);
     }
 
@@ -94,6 +89,6 @@ public class UserUseCaseImpl implements UserUseCase {
 
     @Override
     public Map<String, String> getAllUserEmails() {
-        return  userRepository.getAllUserEmails();
+        return userRepository.getAllUserEmails();
     }
 }

@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.android.mail)
     implementation(libs.android.activation)
     implementation(libs.places)
+    implementation(libs.androidx.work.runtime)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

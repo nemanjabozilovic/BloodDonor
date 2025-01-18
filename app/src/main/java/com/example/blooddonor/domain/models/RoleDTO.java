@@ -4,21 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class RoleDTO implements Parcelable {
-    private int id;
-    private String roleName;
-
-    public RoleDTO() {}
-
-    public RoleDTO(int id, String roleName) {
-        this.id = id;
-        this.roleName = roleName;
-    }
-
-    protected RoleDTO(Parcel in) {
-        id = in.readInt();
-        roleName = in.readString();
-    }
-
     public static final Creator<RoleDTO> CREATOR = new Creator<RoleDTO>() {
         @Override
         public RoleDTO createFromParcel(Parcel in) {
@@ -30,6 +15,21 @@ public class RoleDTO implements Parcelable {
             return new RoleDTO[size];
         }
     };
+    private int id;
+    private String roleName;
+
+    public RoleDTO() {
+    }
+
+    public RoleDTO(int id, String roleName) {
+        this.id = id;
+        this.roleName = roleName;
+    }
+
+    protected RoleDTO(Parcel in) {
+        id = in.readInt();
+        roleName = in.readString();
+    }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {

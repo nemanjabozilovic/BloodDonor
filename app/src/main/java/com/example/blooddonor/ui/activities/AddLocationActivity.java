@@ -52,13 +52,26 @@ public class AddLocationActivity extends BaseActivity {
     private AutoCompleteTextView locationTypeDropdown;
     private TextInputEditText locationSearchField, locationNameField, phoneNumbersField, cityCountryField, latitudeField, longitudeField;
     private TextInputLayout locationSearchInputLayout, locationNameInputLayout, phoneNumbersInputLayout, cityCountryInputLayout, latitudeInputLayout, longitudeInputLayout, locationTypeInputLayout;
-
+    private final ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Place place = Autocomplete.getPlaceFromIntent(result.getData());
+                    populateLocationFields(place);
+                    clearError(locationSearchInputLayout);
+                    clearError(locationNameInputLayout);
+                } else if (result.getResultCode() == AutocompleteActivity.RESULT_ERROR && result.getData() != null) {
+                    Status status = Autocomplete.getStatusFromIntent(result.getData());
+                    Toast.makeText(this, getString(R.string.location_search_failed) + ": " + status.getStatusMessage(), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, R.string.location_search_failed, Toast.LENGTH_SHORT).show();
+                }
+            }
+    );
     private LocationUseCase locationUseCase;
     private LocationTypeUseCase locationTypeUseCase;
     private RoleUseCase roleUseCase;
-
     private String selectedLocationType;
-
     private UserDTO currentUser;
 
     @Override
@@ -179,24 +192,6 @@ public class AddLocationActivity extends BaseActivity {
         startActivityIntent.launch(intent);
     }
 
-    private final ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    Place place = Autocomplete.getPlaceFromIntent(result.getData());
-                    populateLocationFields(place);
-                    clearError(locationSearchInputLayout);
-                    clearError(locationNameInputLayout);
-                } else if (result.getResultCode() == AutocompleteActivity.RESULT_ERROR && result.getData() != null) {
-                    Status status = Autocomplete.getStatusFromIntent(result.getData());
-                    Toast.makeText(this, getString(R.string.location_search_failed) + ": " + status.getStatusMessage(), Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(this, R.string.location_search_failed, Toast.LENGTH_SHORT).show();
-                }
-            }
-    );
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -239,7 +234,7 @@ public class AddLocationActivity extends BaseActivity {
             if (locationUseCase.insertLocation(location) != null) {
                 Toast.makeText(this, getString(R.string.location_saved), Toast.LENGTH_SHORT).show();
                 openLocationListActivity(location);
-            }else{
+            } else {
                 Toast.makeText(this, getString(R.string.location_save_error), Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {

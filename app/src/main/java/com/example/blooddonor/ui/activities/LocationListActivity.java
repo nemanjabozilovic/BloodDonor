@@ -19,10 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.blooddonor.R;
 import com.example.blooddonor.data.datasources.databases.DatabaseHelper;
 import com.example.blooddonor.data.repositories.BloodRequestRepositoryImpl;
-import com.example.blooddonor.data.repositories.RoleRepositoryImpl;
-import com.example.blooddonor.domain.models.LocationDTO;
 import com.example.blooddonor.data.repositories.LocationRepositoryImpl;
 import com.example.blooddonor.data.repositories.LocationTypeRepositoryImpl;
+import com.example.blooddonor.data.repositories.RoleRepositoryImpl;
+import com.example.blooddonor.domain.models.LocationDTO;
 import com.example.blooddonor.domain.models.LocationTypeDTO;
 import com.example.blooddonor.domain.models.UserDTO;
 import com.example.blooddonor.domain.repositories.BloodRequestRepository;
@@ -37,8 +37,8 @@ import com.example.blooddonor.domain.usecases.interfaces.LocationUseCase;
 import com.example.blooddonor.domain.usecases.interfaces.RoleUseCase;
 import com.example.blooddonor.ui.adapters.LocationAdapter;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -169,7 +169,8 @@ public class LocationListActivity extends BaseActivity {
     private void setupSearchInput() {
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -177,7 +178,8 @@ public class LocationListActivity extends BaseActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
     }
 

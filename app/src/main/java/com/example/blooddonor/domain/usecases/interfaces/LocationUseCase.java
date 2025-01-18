@@ -6,8 +6,12 @@ import java.util.List;
 
 public interface LocationUseCase {
     LocationDTO getLocationById(int locationId);
+
     List<LocationDTO> getAllLocations();
+
     LocationDTO insertLocation(LocationDTO locationDTO);
+
     boolean updateLocation(LocationDTO locationDTO);
+
     boolean deleteLocation(int locationId);
 }

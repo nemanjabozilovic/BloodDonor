@@ -51,6 +51,21 @@ public class EditLocationActivity extends BaseActivity {
     private LocationUseCase locationUseCase;
     private LocationTypeUseCase locationTypeUseCase;
     private String selectedLocationType;
+    private final ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Place place = Autocomplete.getPlaceFromIntent(result.getData());
+                    populateLocationFields(place);
+                    clearError(locationSearchInputLayout);
+                } else if (result.getResultCode() == AutocompleteActivity.RESULT_ERROR && result.getData() != null) {
+                    Status status = Autocomplete.getStatusFromIntent(result.getData());
+                    Toast.makeText(this, getString(R.string.location_search_failed) + ": " + status.getStatusMessage(), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, R.string.location_search_failed, Toast.LENGTH_SHORT).show();
+                }
+            }
+    );
     private LocationDTO currentLocation;
 
     @Override
@@ -162,22 +177,6 @@ public class EditLocationActivity extends BaseActivity {
         ).build(this);
         startActivityIntent.launch(intent);
     }
-
-    private final ActivityResultLauncher<Intent> startActivityIntent = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    Place place = Autocomplete.getPlaceFromIntent(result.getData());
-                    populateLocationFields(place);
-                    clearError(locationSearchInputLayout);
-                } else if (result.getResultCode() == AutocompleteActivity.RESULT_ERROR && result.getData() != null) {
-                    Status status = Autocomplete.getStatusFromIntent(result.getData());
-                    Toast.makeText(this, getString(R.string.location_search_failed) + ": " + status.getStatusMessage(), Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(this, R.string.location_search_failed, Toast.LENGTH_SHORT).show();
-                }
-            }
-    );
 
     private void populateLocationFields(Place place) {
         locationSearchField.setText(place.getFormattedAddress());

@@ -4,11 +4,23 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class FaqDTO implements Parcelable {
+    public static final Creator<FaqDTO> CREATOR = new Creator<FaqDTO>() {
+        @Override
+        public FaqDTO createFromParcel(Parcel in) {
+            return new FaqDTO(in);
+        }
+
+        @Override
+        public FaqDTO[] newArray(int size) {
+            return new FaqDTO[size];
+        }
+    };
     private int id;
     private String question;
     private String answer;
 
-    public FaqDTO() {}
+    public FaqDTO() {
+    }
 
     public FaqDTO(int id, String question, String answer) {
         this.id = id;
@@ -21,18 +33,6 @@ public class FaqDTO implements Parcelable {
         question = in.readString();
         answer = in.readString();
     }
-
-    public static final Creator<FaqDTO> CREATOR = new Creator<FaqDTO>() {
-        @Override
-        public FaqDTO createFromParcel(Parcel in) {
-            return new FaqDTO(in);
-        }
-
-        @Override
-        public FaqDTO[] newArray(int size) {
-            return new FaqDTO[size];
-        }
-    };
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {

@@ -14,10 +14,10 @@ import com.example.blooddonor.domain.models.UserDTO;
 
 import java.util.List;
 
-public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder>{
+public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
-    private List<UserDTO> users;
     private final UserAdapter.OnLocationClickListener listener;
+    private List<UserDTO> users;
 
     public UserAdapter(List<UserDTO> users, UserAdapter.OnLocationClickListener listener) {
         this.users = users;
@@ -54,7 +54,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     public interface OnLocationClickListener {
         void onLocationClick(UserDTO user);
+
         void onEditClick(UserDTO user);
+
         void onDeleteClick(int userId);
     }
 

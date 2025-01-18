@@ -6,10 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.blooddonor.R;
 import com.example.blooddonor.domain.models.FaqDTO;
+
 import java.util.List;
 
 public class FaqAdapter extends RecyclerView.Adapter<FaqAdapter.ViewHolder> {

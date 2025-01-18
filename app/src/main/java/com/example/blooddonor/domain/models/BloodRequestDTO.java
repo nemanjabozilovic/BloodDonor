@@ -4,6 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class BloodRequestDTO implements Parcelable {
+    public static final Creator<BloodRequestDTO> CREATOR = new Creator<BloodRequestDTO>() {
+        @Override
+        public BloodRequestDTO createFromParcel(Parcel in) {
+            return new BloodRequestDTO(in);
+        }
+
+        @Override
+        public BloodRequestDTO[] newArray(int size) {
+            return new BloodRequestDTO[size];
+        }
+    };
     private int id;
     private int submittedBy;
     private String patientName;
@@ -15,7 +26,8 @@ public class BloodRequestDTO implements Parcelable {
     private String locationName;
     private String submittedByName;
 
-    public BloodRequestDTO() {}
+    public BloodRequestDTO() {
+    }
 
     public BloodRequestDTO(int id, int submittedBy, String patientName, int locationId, String bloodType, String possibleDonors, String createdAt, String deadline) {
         this.id = id;
@@ -40,18 +52,6 @@ public class BloodRequestDTO implements Parcelable {
         locationName = in.readString();
         submittedByName = in.readString();
     }
-
-    public static final Creator<BloodRequestDTO> CREATOR = new Creator<BloodRequestDTO>() {
-        @Override
-        public BloodRequestDTO createFromParcel(Parcel in) {
-            return new BloodRequestDTO(in);
-        }
-
-        @Override
-        public BloodRequestDTO[] newArray(int size) {
-            return new BloodRequestDTO[size];
-        }
-    };
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {

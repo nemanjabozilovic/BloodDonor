@@ -4,21 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class LocationTypeDTO implements Parcelable {
-    private int id;
-    private String name;
-
-    public LocationTypeDTO() {}
-
-    public LocationTypeDTO(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    protected LocationTypeDTO(Parcel in) {
-        id = in.readInt();
-        name = in.readString();
-    }
-
     public static final Creator<LocationTypeDTO> CREATOR = new Creator<LocationTypeDTO>() {
         @Override
         public LocationTypeDTO createFromParcel(Parcel in) {
@@ -30,6 +15,21 @@ public class LocationTypeDTO implements Parcelable {
             return new LocationTypeDTO[size];
         }
     };
+    private int id;
+    private String name;
+
+    public LocationTypeDTO() {
+    }
+
+    public LocationTypeDTO(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    protected LocationTypeDTO(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+    }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {

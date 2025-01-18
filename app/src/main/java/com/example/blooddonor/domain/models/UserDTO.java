@@ -4,6 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class UserDTO implements Parcelable {
+    public static final Creator<UserDTO> CREATOR = new Creator<UserDTO>() {
+        @Override
+        public UserDTO createFromParcel(Parcel in) {
+            return new UserDTO(in);
+        }
+
+        @Override
+        public UserDTO[] newArray(int size) {
+            return new UserDTO[size];
+        }
+    };
     private int id;
     private String fullName;
     private String email;
@@ -16,7 +27,8 @@ public class UserDTO implements Parcelable {
     private String roleName;
     private int verificationCode;
 
-    public UserDTO() {}
+    public UserDTO() {
+    }
 
     public UserDTO(int id, String fullName, String email, String dateOfBirth, String password, String salt, String bloodType, String profilePicture, int roleId, int verificationCode) {
         this.id = id;
@@ -44,18 +56,6 @@ public class UserDTO implements Parcelable {
         roleName = in.readString();
         verificationCode = in.readInt();
     }
-
-    public static final Creator<UserDTO> CREATOR = new Creator<UserDTO>() {
-        @Override
-        public UserDTO createFromParcel(Parcel in) {
-            return new UserDTO(in);
-        }
-
-        @Override
-        public UserDTO[] newArray(int size) {
-            return new UserDTO[size];
-        }
-    };
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {

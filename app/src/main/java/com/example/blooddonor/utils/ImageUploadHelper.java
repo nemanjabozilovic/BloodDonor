@@ -30,8 +30,7 @@ public class ImageUploadHelper {
             }
 
             if (existingFilePath != null && !existingFilePath.isEmpty()) {
-                if (!deleteImage(existingFilePath))
-                {
+                if (!deleteImage(existingFilePath)) {
                     throw new Exception(String.valueOf(R.string.error_deleting_image));
                 }
             }
